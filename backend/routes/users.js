@@ -23,9 +23,6 @@ const uploadfile=multer({
   })
 }).single('profile_image');
 
-
-
-
 const router= express.Router();
 
 router.post('/',uploadfile,createUser);
@@ -33,9 +30,9 @@ router.get('/',auth,GetUsers);
 router.get('/profile',auth,GetProfile);
 router.patch('/profile',uploadfile,auth,UpdateProfile);
 router.get('/:id',auth,GetUserDetail);
-router.patch('/:id',uploadfile,auth,UpdateUsers);
 router.delete('/:id',auth,DeleteUser);
 router.patch('/change_password',auth,ChangePassword);
+router.patch('/:id',auth,uploadfile,UpdateUsers);
 
 
 export default router;

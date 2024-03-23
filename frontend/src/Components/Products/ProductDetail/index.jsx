@@ -1,37 +1,28 @@
-import React, { Fragment } from 'react';
-import { Container, Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
-import { Breadcrumbs, H5 } from '../../../AbstractElements'
-import { useParams } from 'react-router';
+import React from "react";
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
 
-const ProductDetail = () => {
-    const {id}=useParams();
+export default function Index({modalData,showModal,closeModal}) {
+   
+
   return (
-    <Fragment>
-      <Breadcrumbs mainTitle='Products' parent='Products' title='Edit'/>
-      <Container fluid={true}>
-        <Row>
-          <Col sm='12'>
-          <Card>
-            <CardHeader><H5>Product Detail</H5></CardHeader>
-            <CardBody>
-                <Row>
-                    <Col md={6}><img src={require('../../../assets/images/user.jpg')} alt="" width="100%"/></Col>
-                    <Col md={6}>
-                        <H5>Name: Chicken Tikka</H5>
-                        <span>Category: Chicken</span>
-                        <p>Price: 100</p>
-                        <p>Description: Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum veniam quo dignissimos expedita possimus natus veritatis enim asperiores mollitia repudiandae id dolorum, cum hic architecto vitae, quis voluptas quos voluptatibus!</p>
-                    </Col>
-                </Row>
-            </CardBody>
-          </Card>
-
-          </Col>
-        </Row>
-      </Container>
-    </Fragment>
+    <div>
+      <Modal isOpen={showModal} toggle={closeModal} centered>
+        <ModalHeader toggle={closeModal}>Edit Category</ModalHeader>
+        <ModalBody>
+          <Row>
+            <Col md={12}>{modalData.image && modalData.image.url?<img src={modalData.image.url} width="100%" height="300px"/>:''}</Col>
+            <Col md={12} className="mt-4">
+                <h5>Name: {modalData?.name}</h5>
+                <span>Category: {modalData?.category_id?.name}</span>
+                <p>Price: {modalData?.price}</p>
+                <p>Price: {modalData?.discount}</p>
+                <p>Description: {modalData?.description}</p>
+            </Col>
+          </Row>
+        </ModalBody>
+      </Modal>
+    </div>
   );
-};
-
-export default ProductDetail;
+}

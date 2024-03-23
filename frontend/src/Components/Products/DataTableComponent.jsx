@@ -8,7 +8,7 @@ import { FaList } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { deleteProduct, fetchAllProducts } from '../../Redux/Slices/productSlice';
-
+import ProductDetail from './ProductDetail'
 const products=[
     {
         _id:'132121',
@@ -41,6 +41,13 @@ const DataTableComponent = () => {
         setShowModal(false);
         
     };
+    const handleDelete = (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+        if (confirmDelete) {
+          dispatch(deleteProduct(id));
+          // Additional logic after deletion if needed
+        }
+      };
     const navigate=useNavigate();
     const categoriesRow = products.map((item, index) => ({
         id: index,
@@ -49,9 +56,9 @@ const DataTableComponent = () => {
         Price: item.price,
         Image: item.image && item.image.url?<img src={item.image.url} alt=""  style={{width:'60px',height:'60px',borderRadius:'5px'}}/>:"No Image",
         Action: <>
-        <FaList className='mx-2' style={{fontSize:'20px',color:'green',cursor:'pointer'}} onClick={()=>navigate('/products/detail')}/>
+        <FaList className='mx-2' style={{fontSize:'20px',color:'green',cursor:'pointer'}} onClick={()=>openModal(item)}/>
         <FaEdit className='mx-1' style={{fontSize:'20px',color:'blue',cursor:'pointer'}} onClick={()=>navigate('/products/edit',{ state: { item: item } })}/>
-        <MdDelete className='mx-1' style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>dispatch(deleteProduct(item._id))}/>
+        <MdDelete className='mx-1' style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>    handleDelete(item._id)}/>
         </>
     }));
     useEffect(()=>{
@@ -75,6 +82,7 @@ const DataTableComponent = () => {
                     center={true}
                     pagination
                     />
+                {showModal && <ProductDetail modalData={modalData} showModal={showModal} closeModal={closeModal}/>}
                 </>
             )}  
         </Fragment>

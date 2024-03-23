@@ -183,6 +183,44 @@ export const ForgotPassword = async (req, res) => {
 
 
       
+      res.status(200).json({ message: "Please Check your email" });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
+export const UserForgotPassword = async (req, res) => {
+  
+    const { email } = req.body;
+    try {
+      const existingUser = await Users.findOne({ email });
+      if (!existingUser)
+        return res.status(201).json({ message: "invalid Email..." });
+      
+      const otp = Math.floor(1000 + Math.random() * 9000);
+
+
+      const token = randomString(10);
+      await Users.findByIdAndUpdate(
+        existingUser._id,
+        { resetToken: token },
+        {
+          new: true,
+        }
+      );
+
+        let message=`<html>
+                    <body>
+                    <p>Hi ${existingUser.name}, Your Request of Forgot Password has received. Place the Otp to procced</p>
+                    <h3>OPT: ${otp}</h3>
+                    </body>
+                    </html>`
+                    console.log(message)
+        
+      SendEmail(existingUser.email,"Forgot Password",message);
+
+
+      res.status(404).json({ message: "OTP sent to your email", resetToken:token,otp });
+      
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -204,7 +242,7 @@ export const ForgotPassword = async (req, res) => {
     try {
       const existingUser = await Users.findOne({ resetToken:token });
       if (!existingUser)
-        return res.status(404).json({ message: "Jeton invalide" });
+        return res.status(404).json({ message: "Invalid Token" });
   
       const hashPassword = await bcrypt.hash(password, 10);
       const data = await Users.findByIdAndUpdate(
@@ -215,7 +253,7 @@ export const ForgotPassword = async (req, res) => {
           new: true,
         }
       );
-      res.status(200).json({error:false,message:"Le mot de passe a été changé avec succès"});
+      res.status(200).json({error:false,message:"Password Changed Successfully"});
     } catch (error) {
       res.status(404).json({ message: error.message });
     }

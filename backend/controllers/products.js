@@ -87,6 +87,7 @@ export const UpdateProduct=async(req, res)=>{
                 // uploading image to cloudnary
                 try{
                     if(product.image!=null && product.image!=""){
+                        console.log("product image is not null")
                         const publicIdToDelete = fileData.path.public_id;
                         const respurse_deleted = await cloudinary.v2.api.delete_resources([publicIdToDelete],{ type: 'upload', resource_type: 'raw' });
                     }
@@ -102,14 +103,10 @@ export const UpdateProduct=async(req, res)=>{
         }
 
 
-
-        const updatedProduct= await Products.findByIdAndUpdate(
-            id,
-            product,
-            {
-                new:true
-            }
-        );
+        if (product.image == "") {
+            delete product.image;
+        }
+        const updatedProduct= await Products.findByIdAndUpdate(id,product,{new:true});
 
         return res.status(200).json({ message:"Product Updated Successfully..."});
 

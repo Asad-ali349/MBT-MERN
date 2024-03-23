@@ -3,6 +3,7 @@ import cloudinary from 'cloudinary';
 import fs from 'fs';
 import { addCategorySchema, updateCategorySchema } from "../Validations/index.js";
 import Products from '../models/products.js';
+import products from "../models/products.js";
 
 
 export const createCategory= async (req, res)=>{   
@@ -116,7 +117,9 @@ export const UpdateCategory=async(req, res)=>{
                 }
             }
         }
-
+        if (category.image == "") {
+            delete category.image;
+        }
         const updatedCategory= await Categories.findByIdAndUpdate(
             id,
             category,
@@ -138,6 +141,10 @@ export const UpdateCategory=async(req, res)=>{
 export const DeleteCategory= async (req,res)=>{
     const {id} = req.params;
     try {
+        const product=await products.find({category_id:id});
+        if(product.length>0){
+            return res.status(400).json({ message: "This categpory is used by any product..."}); 
+        }
         const deleteCategory=await Categories.findOneAndDelete({_id:id});
         return res.status(200).json({ message: "Category Deleted Successfully"});
     } catch (error) {

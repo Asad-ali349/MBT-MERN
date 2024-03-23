@@ -21,7 +21,7 @@ export const addProduct = createAsyncThunk(ADD_PRRODUCT, async (data) => {
   try {
     const response = await POSTFILE('product',data);
     toast.success("Product Saved Sucessfully....");
-    return response.data.product
+    
   } catch (error) {
     toast.error(error)
     console.log(error)
@@ -72,7 +72,6 @@ const productSlice = createSlice({
       })
       .addCase(addProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products.push(action.payload);
       })
       .addCase(addProduct.pending, (state) => {
         state.loading = true;

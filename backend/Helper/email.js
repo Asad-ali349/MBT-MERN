@@ -10,6 +10,8 @@ const SendEmail = (email,subject,message)=>{
               pass: process.env.EMAIL_Password,
             },
         });
+
+        
         
         transporter.verify(function (error, success) {
             if (error) {
