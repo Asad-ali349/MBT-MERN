@@ -30,7 +30,7 @@ export const updateUserSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
-    address: Joi.string().allow(null),
+    street: Joi.string().allow(null),
 }).unknown();
 
 export const updateCategorySchema = Joi.object({
