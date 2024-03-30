@@ -163,7 +163,7 @@ export const UpdateProfileImage=async(req, res)=>{
     const user={};
     try{
         
-
+    
         if(!req.file || Object.keys(req.file).length === 0){
             return res.status(400).json({ message: "Image is required" });
         }
@@ -192,7 +192,7 @@ export const UpdateProfileImage=async(req, res)=>{
             }
         );
 
-        return res.status(200).json({ message:"User Image Updated Successfully..."});
+        return res.status(200).json({ message:"User Image Updated Successfully...", image: updatedUser.profile_image});
 
     }catch(error){  
         // If an error occurs during the process, return a 500 status with the error message
