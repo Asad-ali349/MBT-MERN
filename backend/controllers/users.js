@@ -158,6 +158,49 @@ export const UpdateProfile=async(req, res)=>{
     }
 
 }
+export const UpdateProfileImage=async(req, res)=>{
+    const {user_id}=req;
+    const user={};
+    try{
+        
+
+        if(!req.file || Object.keys(req.file).length === 0){
+            return res.status(400).json({ message: "Image is required" });
+        }
+
+        const file = req.file; 
+        // uploading image to cloudnary
+        try{
+            if(user.profile_image!=null && user.profile_image!=""){
+                const publicIdToDelete = fileData.path.public_id;
+                const respurse_deleted = await cloudinary.v2.api.delete_resources([publicIdToDelete],{ type: 'upload', resource_type: 'raw' });
+            }
+            await cloudinary.v2.uploader.upload(file.path, { folder: "Mithu_Users", resource_type: 'raw' }, async (err, result) => {
+                if(err) throw err;
+                removeTmp(file.path)
+                user.profile_image= { public_id: result.public_id, url: result.secure_url }
+            })
+        }catch(error){
+            console.log(error)
+        }
+
+        const updatedUser= await Users.findByIdAndUpdate(
+            user_id,
+            user,
+            {
+                new:true
+            }
+        );
+
+        return res.status(200).json({ message:"User Image Updated Successfully..."});
+
+    }catch(error){  
+        // If an error occurs during the process, return a 500 status with the error message
+        console.error('Error in uploading user image:', error);
+        return res.status(500).json({ message: error });
+    }
+
+}
 export const UpdateUsers=async(req, res)=>{
     const id=req.params.id;
     const user=req.body;

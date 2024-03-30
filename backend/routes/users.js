@@ -7,7 +7,8 @@ import {
     GetUserDetail,
     GetProfile,
     UpdateProfile,
-    ChangePassword
+    ChangePassword,
+    UpdateProfileImage
 } from '../controllers/users.js';
 import auth from '../middlewares/auth.js';
 import multer from 'multer';
@@ -29,6 +30,7 @@ router.post('/',uploadfile,createUser);
 router.get('/',auth,GetUsers);
 router.get('/profile',auth,GetProfile);
 router.patch('/profile',uploadfile,auth,UpdateProfile);
+router.patch('/profile_image',uploadfile,auth,UpdateProfileImage);
 router.get('/:id',auth,GetUserDetail);
 router.delete('/:id',auth,DeleteUser);
 router.patch('/change_password',auth,ChangePassword);
