@@ -162,6 +162,7 @@ export const UpdateProfileImage=async(req, res)=>{
     const {user_id}=req;
     const user={};
     try{
+        
     
         if(!req.file || Object.keys(req.file).length === 0){
             return res.status(400).json({ message: "Image is required" });
