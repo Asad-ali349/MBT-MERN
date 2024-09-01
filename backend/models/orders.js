@@ -1,6 +1,11 @@
 
 import mongoose from "mongoose";
+import sequence from 'mongoose-sequence';
+
 const Schema = mongoose.Schema;
+
+// Initialize the plugin
+const AutoIncrement = sequence(mongoose);
 
 const OrderSchema = new Schema({
     customer:{
@@ -92,7 +97,11 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    orderNumber: { type: Number },
 });
+
+// Apply the AutoIncrement plugin to your schema
+OrderSchema.plugin(AutoIncrement, { inc_field: 'orderNumber' });
 
 const Order = mongoose.model('Order', OrderSchema);
 

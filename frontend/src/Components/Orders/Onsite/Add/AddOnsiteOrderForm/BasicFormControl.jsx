@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, Form, FormGroup, Label, Input } from 'reactstrap';
-import { H5 ,Btn} from '../../../../../AbstractElements'
+import { H5 } from '../../../../../AbstractElements'
 import {CardHeader,CardFooter} from 'reactstrap';
 import { Data } from './Data';
 import * as yup from 'yup';
@@ -9,11 +9,12 @@ import {useSelector,useDispatch} from 'react-redux';
 import { fetchAllProducts } from '../../../../../Redux/Slices/productSlice';
 import Select from 'react-select';
 import { OnsiteOrdersActions } from '../../../../../Redux/Slices/OnsiteOrderSlice';
-
+import { useParams } from 'react-router';
+import { IoReceiptOutline } from "react-icons/io5";
 const BasicFormControlClass = () => {
     const {products}=useSelector(state=>state.products);
     const {is_Service}=useSelector(state=>state.OnsiteOrders)
-    const [isService,SetIsService]=useState(true);
+    const orderId=useParams()
     const dispatch=useDispatch()
     const validationSchema = yup.object({
         name: yup.object().required(),
@@ -55,9 +56,9 @@ const BasicFormControlClass = () => {
     return (
         <Fragment>
             <Card>
-                <CardHeader>
-                    <H5>Add Order</H5>
-                    
+                <CardHeader style={{display:'flex',justifyContent:'space-between'}}>
+                    <H5>{orderId?'Update':'Add'} Order</H5>
+                    <span style={{fontSize:'1rem',fontWeight:500,color:'red'}}><IoReceiptOutline/> Print Receipt</span>
                 </CardHeader>
                 <Form className="form theme-form" onSubmit={formik.handleSubmit} method='post'>
                     <CardBody>
