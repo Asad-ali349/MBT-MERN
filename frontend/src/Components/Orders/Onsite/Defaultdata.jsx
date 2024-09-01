@@ -1,18 +1,29 @@
 export const tableColumns = [
     
     {
-        name: 'Name',
-        selector: row => row['Name'],
+        name: 'Order Number',
+        selector: row => row['orderNumber'],
         sortable: true,
         center: false,
     },
     {
-        name: 'Image',
-        selector: row => row['Image'],
+        name: 'Order Type',
+        selector: row => row['orderType'],
         sortable: false,
         center: true,
     },
-    
+    {
+        name: 'Payment Method',
+        selector: row => row['paymentMethod'],
+        sortable: false,
+        center: true,
+    },
+    {
+        name: 'Total Price',
+        selector: row => row['grandTotal'],
+        sortable: false,
+        center: true,
+    },
     {
         name: 'Actions',
         selector: row => row['Action'],

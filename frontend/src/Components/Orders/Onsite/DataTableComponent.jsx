@@ -2,31 +2,22 @@ import React, { Fragment, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { tableColumns } from './Defaultdata';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Spinner } from 'reactstrap';
 import { FaList } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { deleteCategory, fetchAllCategories } from '../../../Redux/Slices/categorySlice';
+import { GetOnsiteOrder } from '../../../Redux/Slices/OnsiteOrderSlice';
 
 
 
 
 const DataTableComponent = () => {
-    const {loading,categories}=useSelector(state=>state.categories);
+    const {loading,orders}=useSelector(state=>state.OnsiteOrders);
     const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
-    const [modalData, setModelData] = useState({});
-    const openModal = (data) => {
-        setShowModal(true);
-        setModelData(data)
-        
-    };
-    const closeModal = () => {
-        setShowModal(false);
-        
-    };
-
+    const Navigate = useNavigate();
+    
     const handleDelete = (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this Category?");
         if (confirmDelete) {
@@ -34,16 +25,21 @@ const DataTableComponent = () => {
         }
       };
 
-    const categoriesRow = categories.map((item, index) => ({
+    const categoriesRow = orders.map((item, index) => ({
         id: index,
-        Name: item.name,
-        Image: item.image && item.image.url?<img src={item.image.url} alt=""  style={{width:'60px',height:'60px',borderRadius:'5px'}}/>:"No Image",
-        Action: <><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer'}} onClick={()=>openModal(item)}/>
-        <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>handleDelete(item._id)}/></>
+        orderNumber: item.orderNumber,
+        orderType: item.orderType,
+        paymentMethod: item.paymentMethod,
+        grandTotal: item.grandTotal,
+        Action: <>
+            <Link to={`/onsite_orders/update/${item._id}`}><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer'}}/></Link>
+            <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>handleDelete(item._id)}/>
+        </>
     }));
 
     useEffect(()=>{
-        dispatch(fetchAllCategories())
+        dispatch(GetOnsiteOrder())
+        return ()=>{}
     },[])
 
     return (

@@ -25,7 +25,7 @@ const calculateGrandTotal = (totalPrice, gst, discount) => {
 export const CreateOnsiteOrder=createAsyncThunk('CreateOnsiteOrder',async (data)=>{
     try {
         const placeOrder=await POST('order',data);
-        console.log(placeOrder)
+        toast.success("Order Placed Successfully...")
         return placeOrder.data;
     } catch (error) {
         toast.error(error)
@@ -33,27 +33,63 @@ export const CreateOnsiteOrder=createAsyncThunk('CreateOnsiteOrder',async (data)
         throw error;
     }
 })
+export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ()=>{
+    try {
+        const orders=await GET('order/onsite');
+        console.log(orders.data)
+        return orders.data;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
 
+export const GetSingleOnsiteOrder=createAsyncThunk('GetSingleOnsiteOrder',async (id)=>{
+    try {
+        const orders=await GET(`order/orderDetail/${id}`);
+        return orders.data;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+
+export const UpdateSingleOnsiteOrder=createAsyncThunk('UpdateSingleOnsiteOrder',async ({orderId,data})=>{
+    try {
+        const orders=await UPDATE(`order/${orderId}`,data);
+        console.log(orders)
+        return orders.data.order;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+
+const initialState={
+    OnsiteOrderloading: false,
+    submitting: false,
+    products: [],
+    totalPrice: 0,
+    gst: 0,
+    discount: 0,
+    grandTotal: 0,
+    is_Service:true,
+    payment_method:"cash",
+    gst_percentage:0.14,
+    customer:{
+        name:"",
+        phone:"",
+    },
+    orderDetail:null,
+    orders:[]
+}
 
 const OnsiteOrders = createSlice({
     name: 'OnsiteOrders',
-    initialState: {
-        OnsiteOrderloading: false,
-        submitting: false,
-        products: [],
-        totalPrice: 0,
-        gst: 0,
-        discount: 0,
-        grandTotal: 0,
-        is_Service:true,
-        payment_method:"cash",
-        gst_percentage:0.14,
-        customer:{
-            name:"",
-            phone:"",
-        },
-        orderDetail:null
-    },
+    initialState,
     reducers: {
         addProduct: (state, action) => {
             const product = { ...action.payload };
@@ -120,7 +156,7 @@ const OnsiteOrders = createSlice({
             }
             state.gst = calculateGST(state.totalPrice,state.is_Service,state.gst_percentage);
         },
-        updatePaymentMethod:(state,action)=>{
+        updatePaymentMethod:(state)=>{
             state.payment_method = state.payment_method=="cash"?"online":"cash";
             if(state.is_Service && state.payment_method=="cash"){
                 state.gst_percentage=0.14
@@ -135,18 +171,88 @@ const OnsiteOrders = createSlice({
         },
         updateCustomer:(state,action)=>{
             state.customer={...state.customer,...action.payload};
-        }
+        },
     },
     extraReducers:(builder)=>{
         builder.addCase(CreateOnsiteOrder.fulfilled,(state,action)=>{
-            state.OnsiteOrderloading=false;
-            state.orderDetail=action.payload;
-        }).addCase(CreateOnsiteOrder.pending,(state,action)=>{
+            state.OnsiteOrderloading = false;
+            state.orderDetail = action.payload;
+            state.products = []
+            state.totalPrice = 0
+            state.gst = 0
+            state.discount = 0
+            state.grandTotal = 0
+            state.is_Service = true
+            state.payment_method = "cash"
+            state.gst_percentage = 0.14
+            state.customer = {
+                name:"",
+                phone:"",
+            }
+        }).addCase(CreateOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
-        }).addCase(CreateOnsiteOrder.rejected,(state,action)=>{
+        }).addCase(CreateOnsiteOrder.rejected,(state)=>{
+            state.OnsiteOrderloading=false;
+        }).addCase(GetOnsiteOrder.fulfilled,(state,action)=>{
+            state.OnsiteOrderloading=false;
+            state.orders=action.payload;
+        }).addCase(GetOnsiteOrder.pending,(state)=>{
+            state.OnsiteOrderloading=true;
+        }).addCase(GetOnsiteOrder.rejected,(state)=>{
+            state.OnsiteOrderloading=false;
+        }).addCase(GetSingleOnsiteOrder.fulfilled,(state,action)=>{
+            state.OnsiteOrderloading = false;
+            state.products = action.payload.products
+            state.totalPrice = Number(action.payload.totalPrice)
+            state.gst = Number(action.payload.gst)
+            state.discount = Number(action.payload.discount)
+            state.grandTotal = Number(action.payload.grandTotal)
+            state.payment_method = action.payload.paymentMethod
+            state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
+            state.customer = action.payload.customer
+        }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
+            state.OnsiteOrderloading=true;
+            state.products = []
+            state.totalPrice = 0
+            state.gst = 0
+            state.discount = 0
+            state.grandTotal = 0
+            state.is_Service = true
+            state.payment_method = "cash"
+            state.gst_percentage = 0.14
+            state.customer = {
+                name:"",
+                phone:"",
+            }
+        }).addCase(GetSingleOnsiteOrder.rejected,(state)=>{
+            state.OnsiteOrderloading=false;
+        }).addCase(UpdateSingleOnsiteOrder.fulfilled,(state,action)=>{
+            state.OnsiteOrderloading = false;
+            state.products = action.payload.products
+            state.totalPrice = Number(action.payload.totalPrice)
+            state.gst = Number(action.payload.gst)
+            state.discount = Number(action.payload.discount)
+            state.grandTotal = Number(action.payload.grandTotal)
+            state.payment_method = action.payload.paymentMethod
+            state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
+            state.customer = action.payload.customer
+        }).addCase(UpdateSingleOnsiteOrder.pending,(state)=>{
+            state.OnsiteOrderloading=true;
+            state.products = []
+            state.totalPrice = 0
+            state.gst = 0
+            state.discount = 0
+            state.grandTotal = 0
+            state.is_Service = true
+            state.payment_method = "cash"
+            state.gst_percentage = 0.14
+            state.customer = {
+                name:"",
+                phone:"",
+            }
+        }).addCase(UpdateSingleOnsiteOrder.rejected,(state)=>{
             state.OnsiteOrderloading=false;
         })
-
     }
 });
 

@@ -1,16 +1,17 @@
-import React, { Fragment} from "react";
+import React, { Fragment, useEffect} from "react";
 import DataTable from "react-data-table-component";
 import { tableColumns } from "./Defaultdata";
 import { useSelector, useDispatch } from "react-redux";
 import {  Col, Row, Spinner } from "reactstrap";
 import { MdDelete } from "react-icons/md";
-import { CreateOnsiteOrder, OnsiteOrdersActions } from "../../../../Redux/Slices/OnsiteOrderSlice";
+import { CreateOnsiteOrder, GetSingleOnsiteOrder, OnsiteOrdersActions, UpdateSingleOnsiteOrder } from "../../../../Redux/Slices/OnsiteOrderSlice";
+import { useParams } from "react-router";
 
 const DataTableComponent = () => {
   const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,gst_percentage,customer } = useSelector(
     (state) => state.OnsiteOrders
   );
-
+  const {orderId}=useParams()
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
@@ -49,10 +50,18 @@ const DataTableComponent = () => {
     ),
   }));
   const handleSubmit=()=>{
-    console.log("===================> Before Placing Order:",{products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",payment_method})
-    dispatch(CreateOnsiteOrder({products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method}));
+    let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method}
+    if(orderId){
+      dispatch(UpdateSingleOnsiteOrder({orderId,data}));
+    }else{
+      dispatch(CreateOnsiteOrder(data));
+    }
   }
-
+  useEffect(()=>{
+    if(orderId){
+      dispatch(GetSingleOnsiteOrder(orderId))
+    }
+  },[orderId])
   return (
     <Fragment>
       {OnsiteOrderloading ? (

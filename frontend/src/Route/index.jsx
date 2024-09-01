@@ -40,6 +40,7 @@ const Routers = () => {
               <Route  path={'/dashboard'} element={<Dashboard />} />
               <Route  path={'/onsite_orders'} element={<Onsite />} />
               <Route  path={'/onsite_orders/add'} element={<AddOnsite />} />
+              <Route  path={'/onsite_orders/update/:orderId'} element={<AddOnsite />} />
               <Route  path={'/online_orders'} element={<Online />} />
               <Route  path={'/products'} element={<Products />} />
               <Route  path={'/products/add'} element={<AddProducts />} />
