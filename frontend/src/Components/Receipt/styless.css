@@ -1,0 +1,126 @@
+.receipt-header h1 {
+    color: red;
+    font-size: 60px;
+  }
+  
+  .receipt-header .receipt-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .receipt-header .receipt-info span {
+    display: block;
+    margin-top: 5px;
+  }
+  
+  .receipt-header .receipt-info .receipt-detail {
+    margin-top: 50px;
+  }
+  
+  .receipt-header .receipt-info .receipt-detail .orderNumber {
+    color: red;
+    display: inline;
+    font-weight: 500;
+  }
+  
+  .receipt-body {
+    margin-top: 50px;
+  }
+  
+  .receipt-body .rdt_Table {
+    border-bottom: 2px solid red;
+  }
+  
+  .receipt-body .rdt_TableHeadRow {
+    background-color: red !important;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .receipt-footer {
+    margin-top: 50px;
+  }
+  
+  .receipt-footer div {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .receipt-footer div table td {
+    padding: 10px 25px;
+    font-size: 16px;
+  }
+  
+  .receipt-footer div table .heading {
+    font-weight: 500;
+  }
+  
+  .receipt-footer div table .grandTotal {
+    color: red;
+    border-radius: 10px;
+  }
+  
+  .receipt-footer div table .grandTotal td {
+    font-size: 20px !important;
+    font-weight: 700;
+  }
+  
+  .receipt-footer h3 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .receipt-body {
+    margin-top: 50px;
+  }
+  
+  .receipt-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .receipt-body table th,
+  .receipt-body table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .receipt-body table th {
+    background-color: red;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .receipt-body table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .receipt-body table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .receipt-body .rdt_Table {
+    border-bottom: 2px solid red;
+  }
+  
+  .receipt-body .rdt_TableHeadRow {
+    background-color: red !important;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .receipt-body table tbody td {
+    font-size: 16px;
+  }
+  
+  .receipt-body table tfoot {
+    font-weight: 700;
+  }
+  
+  .receipt-body table tfoot td {
+    padding: 15px;
+    background-color: #f2f2f2;
+  }
+  

@@ -6,7 +6,7 @@ import auth from '../middlewares/auth.js';
 const router= express.Router();
 
 router.post('/signin',Signin);
-router.post('/adminsignin',AdminSignin);
+router.post('/admin/signin',AdminSignin);
 router.post('/signup',Signup);
 router.post('/forgot_password',ForgotPassword);
 router.post('/user_forgot_password',UserForgotPassword);

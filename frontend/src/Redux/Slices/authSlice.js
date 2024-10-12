@@ -12,7 +12,7 @@ const CHANGEPASSWORD = 'changepassword';
 
 export const login = createAsyncThunk(LOGIN, async (data) => {
   try {
-    const response = await POST('auth/adminsignin',data);
+    const response = await POST('auth/admin/signin',data);
     toast.success("Signin Sucessfully...")
     return response.data;
   } catch (error) {

@@ -1,0 +1,31 @@
+.welcomeCard{
+    margin-top: 33px;
+    height: 87%;
+    background: linear-gradient(103.75deg, #33b1ee -13.9%, #7366ff 79.68%) !important;
+    color: white;
+}
+
+.media{
+    align-items: center;
+    display: flex;
+}
+
+.media .media-body {
+    flex: 1 1;
+}
+.greeting-user{
+    margin-top: 20px;
+}
+.cartoon {
+    -webkit-animation: bounce-effect 5s ease-in infinite;
+    animation: bounce-effect 5s ease-in infinite;
+    bottom: -15px;
+    position: absolute;
+    right: 20px;
+    height: 87%;
+}
+
+.cartoon .media{
+    height: 87%;
+}
+

@@ -84,7 +84,9 @@ const initialState={
         phone:"",
     },
     orderDetail:null,
-    orders:[]
+    orders:[],
+    orderNumber:"",
+    createdAt:""
 }
 
 const OnsiteOrders = createSlice({
@@ -210,6 +212,7 @@ const OnsiteOrders = createSlice({
             state.payment_method = action.payload.paymentMethod
             state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
             state.customer = action.payload.customer
+            state.orderNumber=action.payload.orderNumber
         }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -236,6 +239,7 @@ const OnsiteOrders = createSlice({
             state.payment_method = action.payload.paymentMethod
             state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
             state.customer = action.payload.customer
+            state.orderNumber = action.payload.orderNumber
         }).addCase(UpdateSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
