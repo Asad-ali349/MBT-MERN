@@ -6,7 +6,7 @@ import "./styless.css";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSingleOnsiteOrder } from "../../Redux/Slices/OnsiteOrderSlice";
 import Logo from "../../assets/Logo/logo.png";
-const columns = [ "Item Name", "Unit Price", "Quantiy", "Total Price"];
+const columns = ["Item Name", "Rate", "Qty", "Amount"];
 
 export default function Receipt() {
   const {
@@ -19,6 +19,7 @@ export default function Receipt() {
     customer,
     orderNumber,
     is_Service,
+    payment_method
   } = useSelector((state) => state.OnsiteOrders);
   const { orderId } = useParams();
   const printRef = useRef();
@@ -65,10 +66,6 @@ export default function Receipt() {
               font-size: 20px;
             }
             
-            .receipt-body {
-              margin-top: 50px;
-            }
-            
             .receipt-body .rdt_Table {
               border-bottom: 2px solid red;
             }
@@ -80,7 +77,7 @@ export default function Receipt() {
             }
             
             .receipt-footer {
-              margin-top: 35px;
+              margin-top: 10px;
               position:relative;
             }
             
@@ -90,7 +87,7 @@ export default function Receipt() {
             }
             
             .receipt-footer div table td {
-              padding: 10px 25px;
+              padding: 5px;
               font-size: 16px;
             }
             
@@ -117,20 +114,21 @@ export default function Receipt() {
             
 
             .receipt-body {
-              margin-top: 50px;
+              margin-top: 20px;
+              border-bottom:1px solid black;
             }
 
             .receipt-body table {
               width: 100%;
               border-collapse: collapse;
               margin-bottom: 20px;
+              // border-bottom:1px solid black;
             }
 
             .receipt-body table th,
             .receipt-body table td {
-              // padding: 12px 15px;
+              padding: 5px 5px;
               text-align: left;
-              // border-bottom: 1px solid #ddd;
             }
             thead{
             border:1px solid black !important;
@@ -139,7 +137,6 @@ export default function Receipt() {
             .receipt-body table th {
               color:red
               font-weight: 600;
-              
             }
 
             .receipt-body table tbody tr:nth-child(even) {
@@ -174,13 +171,21 @@ export default function Receipt() {
             }
             .ServiceType{
               font-size: 26px;
-              margin-bottom:30px;
+              margin-bottom:10px;
+              margin-top:20px;
             }
             .LogoImage{
               width: 150px;
               filter: grayscale(100%);
             }
-              
+            .user-info{
+              display: flex;
+              justify-content:space-between;
+              font-size:14px
+            }
+              .customerInfo{
+              margin-top:5px
+              }
           </style>
         </head>
         <body>
@@ -223,49 +228,45 @@ export default function Receipt() {
                 <div className="receipt" ref={printRef}>
                   <div className="receipt-header">
                     <div className="receipt-info">
-                      <div>
-                        <img src={Logo} alt="Logo" className="LogoImage"/>
+                      <div style={{textAlign:'center'}}>
+                        <img src={Logo} alt="Logo" className="LogoImage" />
                         <span>
-                          <b>Phone:</b>123456789
+                          <b>Address:</b> Main Pasroor Road, Opposite Govt College Boys, Satelite Town,Gujranwala
                         </span>
                         <span>
-                          <b>Address:</b> 123, Sector 1, Lahore
+                          <b>Phone #</b> 03217451009, 03200289000
                         </span>
                       </div>
-                      
-                        <div className="user-info" style={{display:"flex",justifyContent:`${customer.name?'space-between':'flex-start'}`}}>
-                          {
-                            customer?.name && (
-                            <div className="customerInfo">
-                              <h5>Billed To</h5>
-                              <span>
-                                <b>Name:</b> {customer?.name }
-                              </span>
-                              <span>
-                                <b>Phone:</b> {customer?.phone}
-                              </span>
-                            </div>
-                            )
-                          }
-                          <div className="receipt-detail">
-                            <span className="ServiceType">
-                              <b>{is_Service ? "Dine In" : "Parcel"}</b>
-                            </span>
-                            <span className="OrderNumberContainer">
-                              <b>Order No:</b>{" "}
-                              <span className="orderNumber">
-                                {" "}
-                                {orderNumber}
-                              </span>
+                      <div className="ServiceType">
+                        <span >
+                          <b>{is_Service ? "Dine In" : "Parcel"}</b>
+                        </span>
+                      </div>
+                      <div
+                        className="user-info"
+                        
+                      >
+                        <div className="receipt-detail">
+                          <span className="OrderNumberContainer">
+                            <b>Order No:</b>{" "}
+                            <span className="orderNumber"> {orderNumber}</span>
+                          </span>
+                          <span>
+                            <b>Date:</b> 12-10-2024
+                          </span>
+                        </div>
+                        {customer?.name && (
+                          <div className="customerInfo">
+                            {/* <h5>Billed To</h5> */}
+                            <span>
+                              <b>Name:</b> {customer?.name}
                             </span>
                             <span>
-                              <b>Date:</b> 12-10-2024
+                              <b>Phone:</b> {customer?.phone}
                             </span>
-                           
                           </div>
-                          
-                        </div>
-                      
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="receipt-body">
@@ -297,13 +298,17 @@ export default function Receipt() {
                           <td className="heading">Sub-Total:</td>
                           <td>{totalPrice}</td>
                         </tr>
-                        <tr>
+                        {/* <tr>
                           <td className="heading">GST:</td>
                           <td>{gst}</td>
-                        </tr>
+                        </tr> */}
                         <tr>
                           <td className="heading">Discount:</td>
                           <td>{discount}</td>
+                        </tr>
+                        <tr>
+                          <td className="heading">payment:</td>
+                          <td>{payment_method}</td>
                         </tr>
                         <tr className="grandTotal">
                           <td className="heading">Grand Total:</td>

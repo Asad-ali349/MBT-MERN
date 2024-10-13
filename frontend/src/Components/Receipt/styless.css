@@ -21,9 +21,6 @@
     font-size: 20px;
   }
   
-  .receipt-body {
-    margin-top: 50px;
-  }
   
   .receipt-body .rdt_Table {
     border-bottom: 2px solid red;
@@ -45,7 +42,7 @@
   }
   
   .receipt-footer div table td {
-    padding: 10px 25px;
+    padding: 5px;
     font-size: 16px;
   }
   
@@ -123,7 +120,8 @@
   }
   .ServiceType{
     font-size: 26px;
-    /* margin-bottom:30px; */
+    margin:20px 0px;
+
   }
   .LogoImage{
     width: 200px;
@@ -131,5 +129,6 @@
   .user-info{
     display: flex;
     justify-content: space-between;
-    margin-top: 50px;
+    font-size:14px
+    /* margin-top: 50px; */
   }
