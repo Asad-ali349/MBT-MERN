@@ -74,7 +74,7 @@ const BasicFormControlClass = () => {
           <H5>{orderId ? "Update" : "Add"} Order</H5>
           {orderId && (
             <span
-              style={{ fontSize: "1rem", fontWeight: 500, color: "red" }}
+              style={{ fontSize: "1rem", fontWeight: 500, color: "red", cursor:'pointer' }}
               onClick={() => Navigate(`/receipt/${orderId}`)}
             >
               <IoReceiptOutline /> View Receipt

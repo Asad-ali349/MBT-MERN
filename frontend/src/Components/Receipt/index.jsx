@@ -5,31 +5,37 @@ import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import "./styless.css";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSingleOnsiteOrder } from "../../Redux/Slices/OnsiteOrderSlice";
-
-const columns = [ 'Sr.', 'Item Name', 'Unit Price', 'Quantiy', 'Total Price'];
+import Logo from "../../assets/Logo/logo.png";
+const columns = [ "Item Name", "Unit Price", "Quantiy", "Total Price"];
 
 export default function Receipt() {
-  const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,customer, orderNumber } = useSelector(
-    (state) => state.OnsiteOrders
-  );
+  const {
+    OnsiteOrderloading,
+    products,
+    totalPrice,
+    gst,
+    grandTotal,
+    discount,
+    customer,
+    orderNumber,
+    is_Service,
+  } = useSelector((state) => state.OnsiteOrders);
   const { orderId } = useParams();
   const printRef = useRef();
   const dispatch = useDispatch();
 
-  const rows = products.map((product,index)=>(
-    {
-      id:index+1,
-      name:product.name,
-      price:product.price,
-      quantity:product.quantity,
-      totalPrice:product.totalPrice,
-    }
-  ))
+  const rows = products.map((product, index) => ({
+    id: index + 1,
+    name: product.name,
+    price: product.price,
+    quantity: product.quantity,
+    totalPrice: product.totalPrice,
+  }));
 
   const handlePrint = () => {
     const printContent = printRef.current;
-    const printWindow = window.open('', '', 'width=302');
-    
+    const printWindow = window.open("", "", "width=302");
+
     // Write the HTML content into the new window
     printWindow.document.write(`
       <html>
@@ -42,24 +48,21 @@ export default function Receipt() {
               font-size: 60px;
             }
             
-            .receipt-header .receipt-info {
-              display: flex;
-              justify-content: space-between;
-            }
+            // .receipt-header .receipt-info {
+            //   display: flex;
+            //   justify-content: space-between;
+            // }
             
             .receipt-header .receipt-info span {
               display: block;
               margin-top: 5px;
             }
             
-            .receipt-header .receipt-info .receipt-detail {
-              margin-top: 50px;
-            }
-            
             .receipt-header .receipt-info .receipt-detail .orderNumber {
-              color: red;
+              color: black;
               display: inline;
-              font-weight: 500;
+              font-weight: 800;
+              font-size: 20px;
             }
             
             .receipt-body {
@@ -77,7 +80,7 @@ export default function Receipt() {
             }
             
             .receipt-footer {
-              margin-top: 50px;
+              margin-top: 35px;
               position:relative;
             }
             
@@ -96,7 +99,7 @@ export default function Receipt() {
             }
             
             .receipt-footer div table .grandTotal {
-              color: red;
+              color: black;
               border-radius: 10px;
             }
             
@@ -125,14 +128,18 @@ export default function Receipt() {
 
             .receipt-body table th,
             .receipt-body table td {
-              padding: 12px 15px;
+              // padding: 12px 15px;
               text-align: left;
-              border-bottom: 1px solid #ddd;
+              // border-bottom: 1px solid #ddd;
+            }
+            thead{
+            border:1px solid black !important;
             }
 
             .receipt-body table th {
               color:red
               font-weight: 600;
+              
             }
 
             .receipt-body table tbody tr:nth-child(even) {
@@ -165,6 +172,15 @@ export default function Receipt() {
               padding: 15px;
               background-color: #f2f2f2;
             }
+            .ServiceType{
+              font-size: 26px;
+              margin-bottom:30px;
+            }
+            .LogoImage{
+              width: 150px;
+              filter: grayscale(100%);
+            }
+              
           </style>
         </head>
         <body>
@@ -172,40 +188,43 @@ export default function Receipt() {
         </body>
       </html>
     `);
-    
+
     // Close the document to trigger the loading of styles
     printWindow.document.close();
-    
+
     // Trigger the print dialog
     printWindow.print();
-    
+
     // Close the print window after printing
     printWindow.onafterprint = () => printWindow.close();
   };
-  useEffect(()=>{
-    dispatch(GetSingleOnsiteOrder(orderId))
-  },[orderId])
-  if(OnsiteOrderloading){
-    return (<p>Loading...</p>)
+  useEffect(() => {
+    dispatch(GetSingleOnsiteOrder(orderId));
+  }, [orderId]);
+  if (OnsiteOrderloading) {
+    return <p>Loading...</p>;
   }
   return (
     <Fragment>
       <Breadcrumbs mainTitle="Receipt" parent="Receipt" />
 
       <Container fluid={true}>
-        
         <Row>
           <Col sm={12}></Col>
           <Col sm="12">
             <Card>
               <CardBody>
-              <button className='btn btn-primary float-end' onClick={handlePrint}>Print</button>
+                <button
+                  className="btn btn-primary float-end"
+                  onClick={handlePrint}
+                >
+                  Print
+                </button>
                 <div className="receipt" ref={printRef}>
                   <div className="receipt-header">
-                    <h1>Receipt</h1>
                     <div className="receipt-info">
                       <div>
-                        <h5>Mithu Butt Tikka Shop</h5>
+                        <img src={Logo} alt="Logo" className="LogoImage"/>
                         <span>
                           <b>Phone:</b>123456789
                         </span>
@@ -213,47 +232,60 @@ export default function Receipt() {
                           <b>Address:</b> 123, Sector 1, Lahore
                         </span>
                       </div>
-                      <div>
-                        <div className="user-info">
-                          <h5>Billed To</h5>
-                          <span>
-                            <b>Name:</b> {customer?.name}
-                          </span>
-                          <span>
-                            <b>Phone:</b> {customer?.phone}
-                          </span>
+                      
+                        <div className="user-info" style={{display:"flex",justifyContent:`${customer.name?'space-between':'flex-start'}`}}>
+                          {
+                            customer?.name && (
+                            <div className="customerInfo">
+                              <h5>Billed To</h5>
+                              <span>
+                                <b>Name:</b> {customer?.name }
+                              </span>
+                              <span>
+                                <b>Phone:</b> {customer?.phone}
+                              </span>
+                            </div>
+                            )
+                          }
+                          <div className="receipt-detail">
+                            <span className="ServiceType">
+                              <b>{is_Service ? "Dine In" : "Parcel"}</b>
+                            </span>
+                            <span className="OrderNumberContainer">
+                              <b>Order No:</b>{" "}
+                              <span className="orderNumber">
+                                {" "}
+                                {orderNumber}
+                              </span>
+                            </span>
+                            <span>
+                              <b>Date:</b> 12-10-2024
+                            </span>
+                           
+                          </div>
+                          
                         </div>
-                        <div className="receipt-detail">
-                          <span>
-                            <b>Receipt No:</b> <span className="orderNumber"> {orderNumber}</span>
-                          </span>
-                          <span>
-                            <b>Issued Date:</b> 12-August-2024
-                          </span>
-                          <span>
-                            <b>Issued Time:</b> 12-August-2024
-                          </span>
-                        </div>
-                      </div>
+                      
                     </div>
                   </div>
                   <div className="receipt-body">
-                   
                     <table>
                       <thead>
-                        {columns.map((column,index)=>{
-                          return <th key={index}>{column}</th>
+                        {columns.map((column, index) => {
+                          return <th key={index}>{column}</th>;
                         })}
                       </thead>
                       <tbody>
-                        {rows.map((item,index)=>{
-                          return <tr key={index}>
-                            <td>{item.id}</td>
-                            <td>{item.name}</td>
-                            <td>{item.price}</td>
-                            <td>{item.quantity}</td>
-                            <td>{item.totalPrice}</td>
-                          </tr>
+                        {rows.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              {/* <td>{item.id}</td> */}
+                              <td>{item.name}</td>
+                              <td>{item.price}</td>
+                              <td>{item.quantity}</td>
+                              <td>{item.totalPrice}</td>
+                            </tr>
+                          );
                         })}
                       </tbody>
                     </table>

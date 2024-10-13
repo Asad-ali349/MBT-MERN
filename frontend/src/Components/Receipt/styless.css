@@ -3,24 +3,22 @@
     font-size: 60px;
   }
   
-  .receipt-header .receipt-info {
+  /* .receipt-header .receipt-info {
     display: flex;
     justify-content: space-between;
-  }
+  } */
   
   .receipt-header .receipt-info span {
     display: block;
     margin-top: 5px;
   }
-  
-  .receipt-header .receipt-info .receipt-detail {
-    margin-top: 50px;
-  }
+
   
   .receipt-header .receipt-info .receipt-detail .orderNumber {
     color: red;
     display: inline;
-    font-weight: 500;
+    font-weight: 800;
+    font-size: 20px;
   }
   
   .receipt-body {
@@ -38,7 +36,7 @@
   }
   
   .receipt-footer {
-    margin-top: 50px;
+    margin-top: 35px;
   }
   
   .receipt-footer div {
@@ -123,4 +121,15 @@
     padding: 15px;
     background-color: #f2f2f2;
   }
-  
+  .ServiceType{
+    font-size: 26px;
+    /* margin-bottom:30px; */
+  }
+  .LogoImage{
+    width: 200px;
+  }
+  .user-info{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+  }

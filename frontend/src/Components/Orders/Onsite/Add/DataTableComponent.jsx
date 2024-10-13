@@ -8,7 +8,7 @@ import { CreateOnsiteOrder, GetSingleOnsiteOrder, OnsiteOrdersActions, UpdateSin
 import { useParams } from "react-router";
 
 const DataTableComponent = () => {
-  const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,gst_percentage,customer } = useSelector(
+  const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,gst_percentage,customer, is_Service } = useSelector(
     (state) => state.OnsiteOrders
   );
   const {orderId}=useParams()
@@ -50,7 +50,7 @@ const DataTableComponent = () => {
     ),
   }));
   const handleSubmit=()=>{
-    let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method}
+    let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method,is_Service}
     if(orderId){
       dispatch(UpdateSingleOnsiteOrder({orderId,data}));
     }else{
@@ -60,6 +60,9 @@ const DataTableComponent = () => {
   useEffect(()=>{
     if(orderId){
       dispatch(GetSingleOnsiteOrder(orderId))
+    }
+    if(!orderId){
+      dispatch(OnsiteOrdersActions.resetState());
     }
   },[orderId])
   return (
@@ -128,10 +131,10 @@ const DataTableComponent = () => {
                   </td>
                 </tr>
 
-                <tr>
+                {/* <tr>
                   <th>GST ({parseInt(gst_percentage*100)}%):</th>
                   <td className="text-center">{gst}</td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th>Grand Total:</th>
                   <td className="text-center">{grandTotal}</td>

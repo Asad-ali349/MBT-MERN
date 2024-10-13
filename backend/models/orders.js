@@ -23,11 +23,16 @@ const OrderSchema = new Schema({
         enum: ['onsite', 'online'],
         required: true
     },
+    is_Service:{
+        type:Boolean,
+        default:false
+    },
     products: [{
         _id: {
             type: Schema.Types.ObjectId,
             ref: 'Product'
         },
+       
         category_id: {
             type: Schema.Types.ObjectId,
             ref: 'Category'
@@ -58,13 +63,7 @@ const OrderSchema = new Schema({
             type: Number,
             required: true
         },
-        createdAt: {
-            type: Date,
-            default: Date.now
-        },
-        updatedAt: {
-            type: Date
-        }
+        
     }],
     discount: {
         type: Number,
@@ -98,6 +97,13 @@ const OrderSchema = new Schema({
         ref: 'User'
     },
     orderNumber: { type: Number },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date
+    }
 });
 
 // Apply the AutoIncrement plugin to your schema

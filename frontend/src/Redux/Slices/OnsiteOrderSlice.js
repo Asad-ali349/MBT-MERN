@@ -78,7 +78,8 @@ const initialState={
     grandTotal: 0,
     is_Service:true,
     payment_method:"cash",
-    gst_percentage:0.14,
+    // gst_percentage:0.14,
+    gst_percentage:0,
     customer:{
         name:"",
         phone:"",
@@ -149,10 +150,12 @@ const OnsiteOrders = createSlice({
         updateIsService:(state)=>{
             state.is_Service = !state.is_Service;
             if(state.is_Service && state.payment_method=="cash"){
-                state.gst_percentage=0.14
+                // state.gst_percentage = 0.14
+                state.gst_percentage = 0
             }
             else if(state.is_Service && state.payment_method=="online"){
-                state.gst_percentage=0.04
+                state.gst_percentage=0
+                // state.gst_percentage=0.04
             }else{
                 state.gst_percentage=0
             }
@@ -161,10 +164,12 @@ const OnsiteOrders = createSlice({
         updatePaymentMethod:(state)=>{
             state.payment_method = state.payment_method=="cash"?"online":"cash";
             if(state.is_Service && state.payment_method=="cash"){
-                state.gst_percentage=0.14
+                // state.gst_percentage=0.14
+                state.gst_percentage=0
             }
             else if(state.is_Service && state.payment_method=="online"){
-                state.gst_percentage=0.04
+                // state.gst_percentage=0.04
+                state.gst_percentage=0
             }else{
                 state.gst_percentage=0
             }
@@ -174,6 +179,23 @@ const OnsiteOrders = createSlice({
         updateCustomer:(state,action)=>{
             state.customer={...state.customer,...action.payload};
         },
+        resetState:(state)=>{
+            state.OnsiteOrderloading = false;
+            state.orderDetail = null;
+            state.products = []
+            state.totalPrice = 0
+            state.gst = 0
+            state.discount = 0
+            state.grandTotal = 0
+            state.is_Service = true
+            state.payment_method = "cash"
+            // state.gst_percentage = 0.14
+            state.gst_percentage = 0
+            state.customer = {
+                name:"",
+                phone:"",
+            }
+        }
     },
     extraReducers:(builder)=>{
         builder.addCase(CreateOnsiteOrder.fulfilled,(state,action)=>{
@@ -186,7 +208,8 @@ const OnsiteOrders = createSlice({
             state.grandTotal = 0
             state.is_Service = true
             state.payment_method = "cash"
-            state.gst_percentage = 0.14
+            // state.gst_percentage = 0.14
+            state.gst_percentage = 0
             state.customer = {
                 name:"",
                 phone:"",
@@ -213,6 +236,7 @@ const OnsiteOrders = createSlice({
             state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
             state.customer = action.payload.customer
             state.orderNumber=action.payload.orderNumber
+            state.is_Service=action.payload.is_Service
         }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -222,7 +246,8 @@ const OnsiteOrders = createSlice({
             state.grandTotal = 0
             state.is_Service = true
             state.payment_method = "cash"
-            state.gst_percentage = 0.14
+            // state.gst_percentage = 0.14
+            state.gst_percentage = 0
             state.customer = {
                 name:"",
                 phone:"",
@@ -249,7 +274,8 @@ const OnsiteOrders = createSlice({
             state.grandTotal = 0
             state.is_Service = true
             state.payment_method = "cash"
-            state.gst_percentage = 0.14
+            // state.gst_percentage = 0.14
+            state.gst_percentage = 0
             state.customer = {
                 name:"",
                 phone:"",
