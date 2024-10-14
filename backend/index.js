@@ -64,6 +64,7 @@ app.use("/user", userRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
+app.use("/order", orderRouter);
 
 // app.use("/organization", organizationRouter);
 
@@ -73,7 +74,7 @@ app.get("/", (req, res) => {
 });
 
 
-mongoose.connect(process.env.CONNECTION_URL , {useNewUrlParser: true,useUnifiedTopology: true}) 
+mongoose.connect(process.env.CONNECTION_URL) 
 .then(
   () => app.listen(PORT, console.log(`Server running on port: ${PORT}`))
 ).catch((err) => {
