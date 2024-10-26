@@ -24,13 +24,24 @@ const DataTableComponent = () => {
           dispatch(deleteCategory(id));
         }
       };
+    const formateDate=(dateStr)=>{
+        const date = new Date(dateStr);
 
+        // Format the date to '13 Sep 2024'
+        const formattedDate = date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        });
+        return formattedDate
+    }
     const categoriesRow = orders.map((item, index) => ({
         id: index,
         orderNumber: item.orderNumber,
-        orderType: item.orderType,
+        orderStatus: <span style={{backgroundColor:`${item.status==='pending'?'red':'green'}`,color:'white',padding:'0px 15px',borderRadius:'17px'}}>{item.status}</span>,
         paymentMethod: item.paymentMethod,
         grandTotal: item.grandTotal,
+        orderDate: formateDate(item.createdAt),
         Action: <>
             <Link to={`/onsite_orders/update/${item._id}`}><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer'}}/></Link>
             <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>handleDelete(item._id)}/>
@@ -38,7 +49,7 @@ const DataTableComponent = () => {
     }));
 
     useEffect(()=>{
-        dispatch(GetOnsiteOrder())
+        dispatch(GetOnsiteOrder({date:''}))
         return ()=>{}
     },[])
 

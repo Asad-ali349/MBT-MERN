@@ -33,9 +33,15 @@ export const CreateOnsiteOrder=createAsyncThunk('CreateOnsiteOrder',async (data)
         throw error;
     }
 })
-export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ()=>{
+export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
+
     try {
-        const orders=await GET('order/onsite');
+        let query='';
+        if(date){
+            query+=`?date=${date}`          
+        }
+        
+        const orders=await GET(`order/onsite${query}`);
         console.log(orders.data)
         return orders.data;
     } catch (error) {
@@ -59,7 +65,18 @@ export const GetSingleOnsiteOrder=createAsyncThunk('GetSingleOnsiteOrder',async 
 export const UpdateSingleOnsiteOrder=createAsyncThunk('UpdateSingleOnsiteOrder',async ({orderId,data})=>{
     try {
         const orders=await UPDATE(`order/${orderId}`,data);
-        console.log(orders)
+        toast.success("Order Updated Successfully...")
+        return orders.data.order;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+export const UpdateOrderStatus=createAsyncThunk('UpdateOrderStatus',async ({orderId,data})=>{
+    try {
+        const orders=await UPDATE(`order/updateOrderStatus/${orderId}`,data);
+        toast.success("Order Status Successfully...")
         return orders.data.order;
     } catch (error) {
         toast.error(error)
@@ -87,7 +104,8 @@ const initialState={
     orderDetail:null,
     orders:[],
     orderNumber:"",
-    createdAt:""
+    createdAt:"",
+    status:""
 }
 
 const OnsiteOrders = createSlice({
@@ -237,6 +255,8 @@ const OnsiteOrders = createSlice({
             state.customer = action.payload.customer
             state.orderNumber=action.payload.orderNumber
             state.is_Service=action.payload.is_Service
+            state.status=action.payload.status
+            state.createdAt=action.payload.createdAt
         }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -265,6 +285,8 @@ const OnsiteOrders = createSlice({
             state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
             state.customer = action.payload.customer
             state.orderNumber = action.payload.orderNumber
+            state.status=action.payload.status
+            state.createdAt=action.payload.createdAt
         }).addCase(UpdateSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -280,7 +302,11 @@ const OnsiteOrders = createSlice({
                 name:"",
                 phone:"",
             }
-        }).addCase(UpdateSingleOnsiteOrder.rejected,(state)=>{
+        }).addCase(UpdateOrderStatus.fulfilled,(state,action)=>{
+            state.status=action.payload.status
+        }).addCase(UpdateOrderStatus.pending,(state)=>{
+            state.status=null
+        }).addCase(UpdateOrderStatus.rejected,(state)=>{
             state.OnsiteOrderloading=false;
         })
     }

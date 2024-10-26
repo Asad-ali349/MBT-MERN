@@ -64,7 +64,6 @@ app.use("/user", userRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
-app.use("/order", orderRouter);
 
 // app.use("/organization", organizationRouter);
 

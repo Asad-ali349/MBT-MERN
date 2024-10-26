@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import {
   Row,
   Col,
@@ -17,12 +17,14 @@ import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllProducts } from "../../../../../Redux/Slices/productSlice";
 import Select from "react-select";
-import { OnsiteOrdersActions } from "../../../../../Redux/Slices/OnsiteOrderSlice";
-import { useNavigate, useNavigation, useParams } from "react-router";
+import { OnsiteOrdersActions, UpdateOrderStatus } from "../../../../../Redux/Slices/OnsiteOrderSlice";
+import { useNavigate, useParams } from "react-router";
 import { IoReceiptOutline } from "react-icons/io5";
+import { MdHourglassTop } from "react-icons/md";
+import { FaRegCheckCircle } from "react-icons/fa";
 const BasicFormControlClass = () => {
   const { products } = useSelector((state) => state.products);
-  const { is_Service } = useSelector((state) => state.OnsiteOrders);
+  const { is_Service, status } = useSelector((state) => state.OnsiteOrders);
   const { orderId } = useParams();
   const dispatch = useDispatch();
   const Navigate = useNavigate();
@@ -65,6 +67,10 @@ const BasicFormControlClass = () => {
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, []);
+
+  const updateStatus =(status,orderId)=>{
+    dispatch(UpdateOrderStatus({orderId,data:{status}}))
+  }
   return (
     <Fragment>
       <Card>
@@ -73,12 +79,32 @@ const BasicFormControlClass = () => {
         >
           <H5>{orderId ? "Update" : "Add"} Order</H5>
           {orderId && (
-            <span
-              style={{ fontSize: "1rem", fontWeight: 500, color: "red", cursor:'pointer' }}
-              onClick={() => Navigate(`/receipt/${orderId}`)}
-            >
-              <IoReceiptOutline /> View Receipt
-            </span>
+            <div>
+              {
+                status==='pending'?(
+                  <span
+                    style={{ fontSize: "1rem", fontWeight: 500, color: 'green', cursor:'pointer', marginInline:'20px' }}
+                    onClick={() => updateStatus('completed',orderId)}
+                  >
+                    <FaRegCheckCircle /> Marks as completed
+                  </span>
+
+                ):(
+                  <span
+                    style={{ fontSize: "1rem", fontWeight: 500, color: 'red', cursor:'pointer', marginInline:'20px' }}
+                    onClick={() => updateStatus('pending',orderId)}
+                  >
+                    <MdHourglassTop /> Marks as pending
+                  </span>
+                )
+              }
+              <span
+                style={{ fontSize: "1rem", fontWeight: 500, color: "red", cursor:'pointer',marginInline:'20px' }}
+                onClick={() => Navigate(`/receipt/${orderId}`)}
+              >
+                <IoReceiptOutline /> View Receipt
+              </span>
+            </div>
           )}
         </CardHeader>
         <Form
@@ -100,7 +126,7 @@ const BasicFormControlClass = () => {
                   type="radio"
                   name="is_parcel"
                   id=""
-                  checked={is_Service == false}
+                  checked={is_Service === false}
                 />{" "}
                 Parcel
               </div>
@@ -120,12 +146,12 @@ const BasicFormControlClass = () => {
             </div>
             <Row className="mb-3">
               {Data.map((items, index) => (
-                <Col md={items.name == "description" ? 12 : 4} key={index}>
+                <Col md={items.name === "description" ? 12 : 4} key={index}>
                   <FormGroup>
                     <Label htmlFor="exampleFormControlInput1">
                       {items.title}
                     </Label>
-                    {items.type == "file" ? (
+                    {items.type === "file" ? (
                       <>
                         <Input
                           className="form-control"
