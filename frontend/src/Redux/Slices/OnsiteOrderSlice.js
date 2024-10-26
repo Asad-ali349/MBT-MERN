@@ -33,12 +33,37 @@ export const CreateOnsiteOrder=createAsyncThunk('CreateOnsiteOrder',async (data)
         throw error;
     }
 })
+
+export const DeleteOnsiteOrder=createAsyncThunk('DeleteOnsiteOrder',async (orderId)=>{
+    try {
+        const placeOrder=await DELETE(`order/${orderId}`);
+        toast.success("Order Deleted Successfully...")
+        return placeOrder.data;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+
 export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
 
     try {
         let query='';
         if(date){
             query+=`?date=${date}`          
+        }else{
+            let todayDate = new Date();
+            const hours = todayDate.getHours();
+            
+            // If the time is before 6 AM, take the previous day's date
+            if (hours < 6) {
+                todayDate.setDate(todayDate.getDate() - 1);
+            }
+            
+            // Format the date as YYYY-MM-DD for the query string
+            const formattedDate = todayDate.toISOString().split('T')[0];
+            query += `?date=${formattedDate}`;
         }
         
         const orders=await GET(`order/onsite${query}`);
@@ -308,6 +333,9 @@ const OnsiteOrders = createSlice({
             state.status=null
         }).addCase(UpdateOrderStatus.rejected,(state)=>{
             state.OnsiteOrderloading=false;
+        }).addCase(DeleteOnsiteOrder.fulfilled,(state,action)=>{
+            let deleteOrderId=action.payload.order._id
+            state.orders=state.orders.filter(order=>order._id!==deleteOrderId);
         })
     }
 });

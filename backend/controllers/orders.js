@@ -175,6 +175,22 @@ export const UpdateOrderStatus=async (req,res)=>{
    
 }
 
+export const DeleteOrder= async (req,res)=>{
+    const {orderId} = req.params;
+    try {
+        // const product=await products.find({category_id:id});
+        // if(product.length>0){
+        //     return res.status(400).json({ message: "This categpory is used by any product..."}); 
+        // }
+        const deleteOrder=await Order.findOneAndDelete({_id:orderId});
+        return res.status(200).json({ message: "Order Deleted Successfully",order:deleteOrder});
+    } catch (error) {
+        console.error('Error creating category:', error);
+        return res.status(500).json({ message: error });
+    }
+
+}
+
 export const GetProductStats = async (req, res) => {
     try {
         const { start, end } = req.query;

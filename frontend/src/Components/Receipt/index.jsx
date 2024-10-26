@@ -48,145 +48,82 @@ export default function Receipt() {
               color: red;
               font-size: 60px;
             }
-            
-            // .receipt-header .receipt-info {
-            //   display: flex;
-            //   justify-content: space-between;
-            // }
-            
+              .qty{
+                text-align: center;
+                width:16%
+              }
             .receipt-header .receipt-info span {
               display: block;
-              margin-top: 5px;
             }
-            
-            .receipt-header .receipt-info .receipt-detail .orderNumber {
+              .ItemName{
+              text-align: left;
+              font-size:18px;
+              white-space: nowrap; /* Prevent wrapping */
+              // width: 40%; /* Flexibly allocate width */
+              }
+              .orderNumber{
               color: black;
-              display: inline;
+              display: inline !important;
               font-weight: 800;
               font-size: 20px;
-            }
-            
-            .receipt-body .rdt_Table {
-              border-bottom: 2px solid red;
-            }
-            
-            .receipt-body .rdt_TableHeadRow {
-              background-color: red !important;
-              color: white;
-              border-radius: 5px;
-            }
-            
-            .receipt-footer {
-              margin-top: 10px;
-              position:relative;
-            }
-            
-            .receipt-footer div {
-              display: flex;
-              justify-content: flex-end;
-            }
-            
-            .receipt-footer div table td {
-              padding: 5px;
-              font-size: 16px;
-            }
-            
-            .receipt-footer div table .heading {
-              font-weight: 500;
-            }
-            
-            .receipt-footer div table .grandTotal {
-              color: black;
-              border-radius: 10px;
-            }
-            
-            .receipt-footer div table .grandTotal td {
-              font-size: 20px !important;
-              font-weight: 700;
-            }
-            
-            .receipt-footer h3 {
-              font-size: 22px;
-              position:absolute:
-              bottom:0px;
-              text-align: center;
-            }
-            
-
+              }
+          
             .receipt-body {
-              margin-top: 20px;
+              margin-top: 10px;
               border-bottom:1px solid black;
             }
-
             .receipt-body table {
               width: 100%;
               border-collapse: collapse;
               margin-bottom: 20px;
-              // border-bottom:1px solid black;
             }
-
             .receipt-body table th,
             .receipt-body table td {
               padding: 5px 5px;
-              text-align: left;
             }
-            thead{
-            border:1px solid black !important;
+            thead {
+              border-bottom: 1px solid black !important;
+              border-top: 1px solid black !important;
             }
-
             .receipt-body table th {
-              color:red
+              color: black;
               font-weight: 600;
             }
-
-            .receipt-body table tbody tr:nth-child(even) {
-              background-color: #f9f9f9;
+            .receipt-footer {
+              margin-top: 10px;
+              position: relative;
             }
-
-            .receipt-body table tbody tr:hover {
-              background-color: #f1f1f1;
+            .receipt-footer div {
+              display: flex;
+              justify-content: flex-end;
             }
-
-            .receipt-body .rdt_Table {
-              border-bottom: 2px solid red;
-            }
-
-            .receipt-body .rdt_TableHeadRow {
-              background-color: red !important;
-              color: white;
-              border-radius: 5px;
-            }
-
-            .receipt-body table tbody td {
+            .receipt-footer div table td {
+              padding: 5px;
               font-size: 16px;
             }
-
-            .receipt-body table tfoot {
+            .receipt-footer div table .grandTotal td {
+              font-size: 20px !important;
               font-weight: 700;
             }
-
-            .receipt-body table tfoot td {
-              padding: 15px;
-              background-color: #f2f2f2;
-            }
-            .ServiceType{
+            .ServiceType {
               font-size: 26px;
-              margin-bottom:10px;
-              margin-top:20px;
+              margin-bottom: 10px;
+              margin-top: 20px;
             }
-            .LogoImage{
+            .LogoImage {
               width: 150px;
               filter: grayscale(100%);
+              margin-top:-20px
             }
-            .user-info{
+            .user-info {
               display: flex;
-              justify-content:space-between;
-              font-size:14px
+              justify-content: space-between;
+              font-size: 14px;
             }
-              .customerInfo{
-              margin-top:5px
-              }
-          </style>
+            .customerInfo {
+              margin-top: 5px;
+            }
+             </style>
         </head>
         <body>
           ${printContent.outerHTML}
@@ -272,19 +209,20 @@ export default function Receipt() {
                   <div className="receipt-body">
                     <table>
                       <thead>
-                        {columns.map((column, index) => {
-                          return <th key={index}>{column}</th>;
-                        })}
+                        <th class="ItemName">Item Description</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
                       </thead>
                       <tbody>
                         {rows.map((item, index) => {
                           return (
                             <tr key={index}>
                               {/* <td>{item.id}</td> */}
-                              <td>{item.name}</td>
-                              <td>{item.price}</td>
-                              <td>{item.quantity}</td>
-                              <td>{item.totalPrice}</td>
+                              <td class="ItemName">{item.name}</td>
+                              <td class="qty">{item.price}</td>
+                              <td class="qty">{item.quantity}</td>
+                              <td class="qty">{item.totalPrice}</td>
                             </tr>
                           );
                         })}
