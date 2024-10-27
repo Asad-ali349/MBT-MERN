@@ -46,7 +46,7 @@ export const GetAllOrders=async (req,res)=>{
         if (date) {
             startDate = new Date(date);
             // Set the time to 3 PM
-            startDate.setHours(12, 0, 0, 0); // 12 PM
+            startDate.setHours(10, 0, 0, 0); //  10AM = 3pm on server
         } else {
             // if(now.getHours()){
 
@@ -60,7 +60,7 @@ export const GetAllOrders=async (req,res)=>{
         if (date) {
             endDate = new Date(date);
             // Set the time to 7 AM of the next day
-            endDate.setHours(7, 0, 0, 0); // 7 AM
+            endDate.setHours(6, 0, 0, 0); // 6 AM
             endDate.setDate(endDate.getDate() + 1); // Next day
         } else {
             endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day
@@ -202,8 +202,8 @@ export const GetProductStats = async (req, res) => {
         let startDate;
         if (start) {
             startDate = new Date(start);
-            // Set the time to 3 PM
-            startDate.setHours(15, 0, 0, 0); // 3 PM
+            // Set the time to 10 AM
+            startDate.setHours(10, 0, 0, 0); // 10AM = 3pm on server
         } else {
             startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0, 0); // 3 PM on the 1st of the month
         }
@@ -212,8 +212,8 @@ export const GetProductStats = async (req, res) => {
         let endDate;
         if (end) {
             endDate = new Date(end);
-            // Set the time to 7 AM of the next day
-            endDate.setHours(7, 0, 0, 0); // 7 AM
+            // Set the time to 6 AM of the next day
+            endDate.setHours(6, 0, 0, 0); // 6 AM
             endDate.setDate(endDate.getDate() + 1); // Next day
         } else {
             endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day

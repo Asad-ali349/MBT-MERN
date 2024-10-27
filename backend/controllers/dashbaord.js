@@ -35,7 +35,7 @@ function getCurrentYearDateRange() {
 function getTodayDateRange() {
     const now = new Date();
     
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0, 0); // 4 PM today
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0, 0); // 4 PM today
     const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 6, 0, 0, 0); // 6 AM tomorrow
 
     // If current time is before 4 PM, adjust to the previous day
