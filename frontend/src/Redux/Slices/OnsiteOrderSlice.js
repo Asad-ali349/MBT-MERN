@@ -33,9 +33,40 @@ export const CreateOnsiteOrder=createAsyncThunk('CreateOnsiteOrder',async (data)
         throw error;
     }
 })
-export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ()=>{
+
+export const DeleteOnsiteOrder=createAsyncThunk('DeleteOnsiteOrder',async (orderId)=>{
     try {
-        const orders=await GET('order/onsite');
+        const placeOrder=await DELETE(`order/${orderId}`);
+        toast.success("Order Deleted Successfully...")
+        return placeOrder.data;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+
+export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
+
+    try {
+        let query='';
+        if(date){
+            query+=`?date=${date}`          
+        }else{
+            let todayDate = new Date();
+            const hours = todayDate.getHours();
+            
+            // If the time is before 6 AM, take the previous day's date
+            if (hours < 6) {
+                todayDate.setDate(todayDate.getDate() - 1);
+            }
+            
+            // Format the date as YYYY-MM-DD for the query string
+            const formattedDate = todayDate.toISOString().split('T')[0];
+            query += `?date=${formattedDate}`;
+        }
+        
+        const orders=await GET(`order/onsite${query}`);
         console.log(orders.data)
         return orders.data;
     } catch (error) {
@@ -59,7 +90,18 @@ export const GetSingleOnsiteOrder=createAsyncThunk('GetSingleOnsiteOrder',async 
 export const UpdateSingleOnsiteOrder=createAsyncThunk('UpdateSingleOnsiteOrder',async ({orderId,data})=>{
     try {
         const orders=await UPDATE(`order/${orderId}`,data);
-        console.log(orders)
+        toast.success("Order Updated Successfully...")
+        return orders.data.order;
+    } catch (error) {
+        toast.error(error)
+        console.log(error)
+        throw error;
+    }
+})
+export const UpdateOrderStatus=createAsyncThunk('UpdateOrderStatus',async ({orderId,data})=>{
+    try {
+        const orders=await UPDATE(`order/updateOrderStatus/${orderId}`,data);
+        toast.success("Order Status Successfully...")
         return orders.data.order;
     } catch (error) {
         toast.error(error)
@@ -87,7 +129,8 @@ const initialState={
     orderDetail:null,
     orders:[],
     orderNumber:"",
-    createdAt:""
+    createdAt:"",
+    status:""
 }
 
 const OnsiteOrders = createSlice({
@@ -237,6 +280,8 @@ const OnsiteOrders = createSlice({
             state.customer = action.payload.customer
             state.orderNumber=action.payload.orderNumber
             state.is_Service=action.payload.is_Service
+            state.status=action.payload.status
+            state.createdAt=action.payload.createdAt
         }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -265,6 +310,8 @@ const OnsiteOrders = createSlice({
             state.gst_percentage = Number(action.payload.gst) / Number(action.payload.totalPrice)
             state.customer = action.payload.customer
             state.orderNumber = action.payload.orderNumber
+            state.status=action.payload.status
+            state.createdAt=action.payload.createdAt
         }).addCase(UpdateSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []
@@ -280,8 +327,15 @@ const OnsiteOrders = createSlice({
                 name:"",
                 phone:"",
             }
-        }).addCase(UpdateSingleOnsiteOrder.rejected,(state)=>{
+        }).addCase(UpdateOrderStatus.fulfilled,(state,action)=>{
+            state.status=action.payload.status
+        }).addCase(UpdateOrderStatus.pending,(state)=>{
+            state.status=null
+        }).addCase(UpdateOrderStatus.rejected,(state)=>{
             state.OnsiteOrderloading=false;
+        }).addCase(DeleteOnsiteOrder.fulfilled,(state,action)=>{
+            let deleteOrderId=action.payload.order._id
+            state.orders=state.orders.filter(order=>order._id!==deleteOrderId);
         })
     }
 });

@@ -4,11 +4,9 @@ import { tableColumns } from './Defaultdata';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { Spinner } from 'reactstrap';
-import { FaList } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { deleteCategory, fetchAllCategories } from '../../../Redux/Slices/categorySlice';
-import { GetOnsiteOrder } from '../../../Redux/Slices/OnsiteOrderSlice';
+import { DeleteOnsiteOrder, GetOnsiteOrder } from '../../../Redux/Slices/OnsiteOrderSlice';
 
 
 
@@ -19,26 +17,37 @@ const DataTableComponent = () => {
     const Navigate = useNavigate();
     
     const handleDelete = (id) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this Category?");
+        const confirmDelete = window.confirm("Are you sure you want to delete this Order?");
         if (confirmDelete) {
-          dispatch(deleteCategory(id));
+          dispatch(DeleteOnsiteOrder(id));
         }
       };
+    const formateDate=(dateStr)=>{
+        const date = new Date(dateStr);
 
+        // Format the date to '13 Sep 2024'
+        const formattedDate = date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        });
+        return formattedDate
+    }
     const categoriesRow = orders.map((item, index) => ({
         id: index,
         orderNumber: item.orderNumber,
-        orderType: item.orderType,
+        orderStatus: <span style={{backgroundColor:`${item.status==='pending'?'red':'green'}`,color:'white',padding:'0px 15px',borderRadius:'17px'}}>{item.status}</span>,
         paymentMethod: item.paymentMethod,
         grandTotal: item.grandTotal,
+        orderDate: formateDate(item.createdAt),
         Action: <>
-            <Link to={`/onsite_orders/update/${item._id}`}><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer'}}/></Link>
-            <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer'}}  onClick={()=>handleDelete(item._id)}/>
+            <Link to={`/onsite_orders/update/${item._id}`}><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer',marginInline:'10px'}}/></Link>
+            <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer', marginInline:'10px'}}  onClick={()=>handleDelete(item._id)}/>
         </>
     }));
 
     useEffect(()=>{
-        dispatch(GetOnsiteOrder())
+        dispatch(GetOnsiteOrder({date:''}))
         return ()=>{}
     },[])
 

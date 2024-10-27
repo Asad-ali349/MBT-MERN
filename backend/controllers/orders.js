@@ -25,7 +25,7 @@ export const CreateOrder=async (req,res)=>{
             throw new Error("Unable to Create Order");
         }
         
-        res.status(200).json({message:"Order Placed Successfully..."})
+        res.status(200).json({message:"Order Placed Successfully...",order:orderCreated})
 
     } catch (error) {
         console.error('Error creating order:', error);
@@ -37,9 +37,56 @@ export const CreateOrder=async (req,res)=>{
 
 export const GetAllOrders=async (req,res)=>{
     try {
+        const { date } = req.query;
+
+        // Create a new Date object for the current date
+        const now = new Date();
+        // If start date is provided, use it; otherwise, set to the first day of the current month at 3 PM
+        let startDate;
+        if (date) {
+            startDate = new Date(date);
+            // Set the time to 3 PM
+            startDate.setHours(15, 0, 0, 0); // 3 PM
+        } else {
+            // if(now.getHours()){
+
+            // }
+            console.log(now.getHours())
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0, 0); // 3 PM on the 1st of the month
+        }
+
+        // If end date is provided, use it; otherwise, set to 7 AM of the next day
+        let endDate;
+        if (date) {
+            endDate = new Date(date);
+            // Set the time to 7 AM of the next day
+            endDate.setHours(7, 0, 0, 0); // 7 AM
+            endDate.setDate(endDate.getDate() + 1); // Next day
+        } else {
+            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day
+        }
+        console.log(startDate,endDate)
+
         const orderType= req.params.orderType
         const orderBy=req.user_id;
-        const orders=await Order.find({orderType,orderBy})
+        // const orders=await Order.find({orderType,orderBy})
+        const orders=await Order.aggregate([
+            {
+                $match:{
+                    orderType,
+                    // orderBy,
+                    createdAt: {
+                        $gte: startDate, // Greater than or equal to start date
+                        $lte: endDate // Less than or equal to end date
+                    }
+                }
+            },
+            {
+                $sort: { createdAt: -1 } // Sort by createdAt in descending order
+            }
+        ]);
+
+       
         if(!orders.length<0){
             return res.status(404).json({message:"No Order Found..."})
         }
@@ -82,7 +129,6 @@ export const UpdateOrder=async (req,res)=>{
         //         throw new Error("Unable to make Payment");
         //     }
         // }
-        console.log(req.body)
         const updatedOrder= await Order.findByIdAndUpdate(
             orderId,
             orderDetails,
@@ -102,3 +148,118 @@ export const UpdateOrder=async (req,res)=>{
     }
    
 }
+
+export const UpdateOrderStatus=async (req,res)=>{
+    const {status}=req.body;
+    const {orderId}=req.params
+    
+    try {
+        if(!orderId) return res.status(400).json({message:'Order id is required'})
+        const updatedOrder= await Order.findByIdAndUpdate(
+            orderId,
+            {status},
+            {
+                new:true
+            }
+        );
+        if(!updatedOrder){
+           return res.status(400).json({message:'Order not found with given id'})
+        }
+        
+        res.status(200).json({message:"Order Status Updated Successfully...",order:updatedOrder})
+
+    } catch (error) {
+        console.error('Error creating order:', error);
+        return res.status(500).json({ message: error });
+    }
+   
+}
+
+export const DeleteOrder= async (req,res)=>{
+    const {orderId} = req.params;
+    try {
+        // const product=await products.find({category_id:id});
+        // if(product.length>0){
+        //     return res.status(400).json({ message: "This categpory is used by any product..."}); 
+        // }
+        const deleteOrder=await Order.findOneAndDelete({_id:orderId});
+        return res.status(200).json({ message: "Order Deleted Successfully",order:deleteOrder});
+    } catch (error) {
+        console.error('Error creating category:', error);
+        return res.status(500).json({ message: error });
+    }
+
+}
+
+export const GetProductStats = async (req, res) => {
+    try {
+        const { start, end } = req.query;
+
+        // Create a new Date object for the current date
+        const now = new Date();
+
+        // If start date is provided, use it; otherwise, set to the first day of the current month at 3 PM
+        let startDate;
+        if (start) {
+            startDate = new Date(start);
+            // Set the time to 3 PM
+            startDate.setHours(15, 0, 0, 0); // 3 PM
+        } else {
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0, 0); // 3 PM on the 1st of the month
+        }
+
+        // If end date is provided, use it; otherwise, set to 7 AM of the next day
+        let endDate;
+        if (end) {
+            endDate = new Date(end);
+            // Set the time to 7 AM of the next day
+            endDate.setHours(7, 0, 0, 0); // 7 AM
+            endDate.setDate(endDate.getDate() + 1); // Next day
+        } else {
+            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day
+        }
+
+
+
+        // Aggregation pipeline to calculate the total quantity sold for each product
+        const productStats = await Order.aggregate([
+            { $match: {
+                createdAt: {
+                    $gte: startDate, // Greater than or equal to start date
+                    $lte: endDate // Less than or equal to end date
+                }
+            } }, // Apply date filter
+            { $unwind: "$products" }, // Unwind the products array to handle each product separately
+            { 
+                $group: {
+                    _id: "$products._id", // Group by product ID
+                    totalSold: { $sum: "$products.quantity" }, // Sum the quantity for each product
+                    productName: { $first: "$products.name" }, // Get the product name
+                    soldAmount: { $sum: "$products.price" } // Get the product name
+                }
+            },
+            {
+                $lookup: {
+                    from: "products", // Reference the Product collection (adjust if needed)
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            { $unwind: "$productDetails" }, // Unwind the product details if needed
+            { 
+                $project: {
+                    _id: 1,
+                    productName: 1,
+                    totalSold: 1,
+                    soldAmount:1,
+                }
+            }
+        ]);
+
+        res.status(200).json(productStats);
+    } catch (error) {
+        console.log('Error:===>', error);
+        res.status(505).json({ message: error.message });
+    }
+};

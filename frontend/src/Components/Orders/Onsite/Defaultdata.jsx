@@ -6,12 +6,7 @@ export const tableColumns = [
         sortable: true,
         center: false,
     },
-    {
-        name: 'Order Type',
-        selector: row => row['orderType'],
-        sortable: false,
-        center: true,
-    },
+    
     {
         name: 'Payment Method',
         selector: row => row['paymentMethod'],
@@ -21,6 +16,18 @@ export const tableColumns = [
     {
         name: 'Total Price',
         selector: row => row['grandTotal'],
+        sortable: false,
+        center: true,
+    },
+    {
+        name: 'Order Date',
+        selector: row => row['orderDate'],
+        sortable: false,
+        center: true,
+    },
+    {
+        name: 'Order Status',
+        selector: row => row['orderStatus'],
         sortable: false,
         center: true,
     },

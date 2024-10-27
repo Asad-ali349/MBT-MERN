@@ -96,6 +96,11 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    status: {
+        type: String,
+        enum: ['pending', 'completed'],
+        default:'pending'
+    },
     orderNumber: { type: Number },
     createdAt: {
         type: Date,
