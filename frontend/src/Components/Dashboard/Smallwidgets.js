@@ -3,55 +3,82 @@ import { Card, CardBody, Row } from 'reactstrap';
 import { H4 } from '../../AbstractElements';
 import SvgIcon from '../Common/Component/SvgIcon';
 import { Col } from 'react-bootstrap';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 const SmallWidgets = ({ mainClass }) => {
+  const {totalSalesToday,totalDiscountOrderTodayResult,totalPendingOrderToday,totalSalesThisMonth,onsiteOrdersToday,totalDiscountToday,onlineOrdersToday,totalProducts,totalCategories} = useSelector(state=>state.dashboard)
   const Data = [
     {
-      title: 'Total Sale (Current Month)',
+      title: "Today's Sale",
       color: 'warning',
-      total: 8,
+      total: totalSalesToday,
       gros: 80,
       icon: 'profit',
     },
     {
-      title: 'Total Sale (Current Year)',
+      title: 'Current Month Sale',
       color: 'warning',
-      total: 9,
+      total: totalSalesThisMonth,
       gros: 80,
 
       icon: 'profit',
     },
+    
     {
-      title: 'Total Products',
-      color: 'primary',
-      total: 10,
-      gros: 50,
-      icon: 'cart',
-    },
-    {
-      title: 'Total Categories',
-      color: 'primary',
-      total: 1,
-      gros: 20,
-      icon: 'rate',
-    },
-    {
-      title: 'Total Onsite Orders',
+      title: "Today's Onsite Orders",
       color: 'success',
-      total: 6,
+      total: onsiteOrdersToday,
       gros: 10,
       icon: 'return-box',
       suffix: 'k',
     },
    
     {
-      title: 'Total Online Orders',
+      title: "Today's  Online Orders",
       color: 'success',
-      total: 7,
+      total: onlineOrdersToday,
       gros: 10,
       icon: 'rate',
       suffix: 'k',
+    },
+    {
+      title: "Today's Total Discount",
+      color: 'success',
+      total: totalDiscountToday,
+      gros: 10,
+      icon: 'return-box',
+      suffix: 'k',
+    },
+   
+    {
+      title: "Today's Discounted Orders",
+      color: 'success',
+      total: totalDiscountOrderTodayResult,
+      gros: 10,
+      icon: 'rate',
+      suffix: 'k',
+    },
+    {
+      title: "Today's Pending Orders",
+      color: 'success',
+      total: totalPendingOrderToday,
+      gros: 10,
+      icon: 'rate',
+      suffix: 'k',
+    },
+    {
+      title: 'Total Products',
+      color: 'primary',
+      total: totalProducts,
+      gros: 50,
+      icon: 'cart',
+    },
+    {
+      title: 'Total Categories',
+      color: 'primary',
+      total: totalCategories,
+      gros: 20,
+      icon: 'rate',
     },
     
 

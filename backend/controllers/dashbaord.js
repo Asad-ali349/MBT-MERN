@@ -57,6 +57,28 @@ export const GetDashbaordDetail = async (req, res) => {
 
         const totalSalesToday=totalSalesTodayResult.length > 0 ? totalSalesTodayResult[0].totalSales : 0;
 
+        // today's discount 
+        const totalDiscountTodayResult = await Order.aggregate([
+            { $match: { createdAt: { $gte: startOfToday, $lte: endOfToday } } },
+            { $group: { _id: null, totalDiscount: { $sum: "$discount" } } },
+        ]);
+
+        const totalDiscountToday=totalDiscountTodayResult.length > 0 ? totalDiscountTodayResult[0].totalDiscount : 0;
+
+
+        // today's discount order count 
+        const totalDiscountOrderTodayResult = await Order.countDocuments({
+            createdAt: { $gte: startOfToday, $lte: endOfToday },
+            orderType: "onsite",
+            discount:{$gte:1}
+        });
+
+        // today's discount order count 
+        const totalPendingOrderToday = await Order.countDocuments({
+            createdAt: { $gte: startOfToday, $lte: endOfToday },
+            status:"pending"
+        });
+
         // Get the date range for the current month
         const { startOfMonth, endOfMonth } = getCurrentMonthDateRange();
 
@@ -150,7 +172,9 @@ export const GetDashbaordDetail = async (req, res) => {
         // Return the statistics
         res.status(200).json({
             totalSalesToday,
-            
+            totalDiscountToday,
+            totalDiscountOrderTodayResult,
+            totalPendingOrderToday,
             totalSalesThisMonth,
             onsiteOrdersToday,
             onlineOrdersToday,

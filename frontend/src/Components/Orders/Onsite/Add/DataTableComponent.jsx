@@ -86,10 +86,9 @@ const DataTableComponent = () => {
       quantity: product.quantity,
       totalPrice: product.totalPrice,
     }));
-    
-    const columns = ["Item Description", "Qty", "Rate" , "Amount"];
+
     const printWindow = window.open("", "", "width=302");
-  
+
     // Create rows and columns for table
     const tableHead = `
     <th class="ItemName">Item Description</th>

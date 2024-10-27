@@ -1,18 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Container, Row, Col, Card, CardBody } from "reactstrap";
 import Smallwidgets from "./Smallwidgets";
 import { Breadcrumbs } from "../../AbstractElements";
 import "./style.css";
 import { Link } from "react-router-dom";
 import Chart from "./Chart";
+import { fetchDashboardData } from "../../Redux/Slices/dashboardSlice";
+import { useDispatch } from "react-redux";
 
 const ChartComponent = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // React.useEffect(() => {
-
-  //   dispatch(Dashboard())
-  // }, [])
 
   const monthlyData = [
     { y: 25060, label: "Jan" },
@@ -35,6 +33,10 @@ const ChartComponent = () => {
     { y: 32400, label: "2022" },
     { y: 35260, label: "2023" },
   ]
+
+  useEffect(()=>{
+    dispatch(fetchDashboardData())
+  },[])
 
   return (
     <Fragment>
