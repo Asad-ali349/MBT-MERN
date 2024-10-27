@@ -46,7 +46,7 @@ export const GetAllOrders=async (req,res)=>{
         if (date) {
             startDate = new Date(date);
             // Set the time to 3 PM
-            startDate.setHours(15, 0, 0, 0); // 3 PM
+            startDate.setHours(12, 0, 0, 0); // 12 PM
         } else {
             // if(now.getHours()){
 
