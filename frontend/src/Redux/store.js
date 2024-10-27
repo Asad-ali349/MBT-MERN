@@ -4,6 +4,7 @@ import authSlice from './Slices/authSlice';
 import categorySlice from './Slices/categorySlice';
 import productSlice from './Slices/productSlice';
 import OnsiteOrderSlice from './Slices/OnsiteOrderSlice';
+import dashboardSlice from './Slices/dashboardSlice'
 
 
 const store= configureStore({
@@ -11,7 +12,8 @@ const store= configureStore({
         auth:authSlice,
         categories:categorySlice,
         products:productSlice,
-        OnsiteOrders:OnsiteOrderSlice
+        OnsiteOrders:OnsiteOrderSlice,
+        dashboard:dashboardSlice
     }
 })
 
