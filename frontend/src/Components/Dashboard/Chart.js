@@ -1,28 +1,30 @@
 import React from "react";
 import CanvasJSReact from "@canvasjs/react-charts";
-export default function Chart({ type, dataPoints, valueFormatString }) {
+export default function Chart({ type, dataPoints }) {
   var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  
 
   const options = {
     animationEnabled: true,
     title: {
-      text: `${type} Sales`,
+      text: `${type} Records`,
     },
-    // axisX: {
-    //   title: "Sale",
-    // },
+    
     axisY: {
       title: "Sales (in Rupees)",
       prefix: "RS",
     },
-    data: [
-      {
-        yValueFormatString: "$#,###",
+    toolTip: {
+      shared: true
+  },
+    data: dataPoints.map((dataPoint)=>{
+      return {
+        // yValueFormatString: "#,###",
         type: "spline",
-        dataPoints: dataPoints, // Using dataPoints with numerical 'x' and string 'label'
-      },
-    ],
+        name: dataPoint.name,
+        showInLegend: true,
+        dataPoints: dataPoint.data,
+      }
+    })
   };
 
   return <CanvasJSChart options={options} />;

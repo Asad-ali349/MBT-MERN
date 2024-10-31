@@ -1,42 +1,41 @@
-import React, { Fragment, useEffect } from "react";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import React, { Fragment, useEffect, useState } from "react";
+import { Container, Row, Col, Card, CardBody} from "reactstrap";
 import Smallwidgets from "./Smallwidgets";
 import { Breadcrumbs } from "../../AbstractElements";
 import "./style.css";
 import { Link } from "react-router-dom";
 import Chart from "./Chart";
 import { fetchDashboardData } from "../../Redux/Slices/dashboardSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import formateMonthlyDataPoints from "../../utils/formateMonthlyDataPoints";
+import formateYearlyDataPoints from "../../utils/formateYearlyDataPoints";
+import DataTableComponent from "./DataTableComponent";
+import HeaderCard from '../Common/Component/HeaderCard';
 
 const ChartComponent = () => {
   const dispatch = useDispatch();
 
-
-  const monthlyData = [
-    { y: 25060, label: "Jan" },
-    { y: 27980, label: "Feb" },
-    { y: 42800, label: "Mar" },
-    { y: 32400, label: "Apr" },
-    { y: 35260, label: "May" },
-    { y: 33900, label: "Jun" },
-    { y: 40000, label: "Jul" },
-    { y: 52500, label: "Aug" },
-    { y: 32300, label: "Sep" },
-    { y: 42000, label: "Oct" },
-    { y: 37160, label: "Nov" },
-    { y: 38400, label: "Dec" },
-  ];
-  const yearlyData=[
-    { y: 25060, label: "2019" },
-    { y: 27980, label: "2020" },
-    { y: 42800, label: "2021" },
-    { y: 32400, label: "2022" },
-    { y: 35260, label: "2023" },
-  ]
+  const {yearlySales,monthlySales}=useSelector(state=>state.dashboard)
+  const [monthlyData,setMonthlyData]= useState([[],[]]);
+  const [yearlyData,setYearlyData]= useState([[],[]]);
+  
 
   useEffect(()=>{
     dispatch(fetchDashboardData())
+
   },[])
+
+  useEffect(() => {
+    if (monthlySales?.length > 0) {
+      setMonthlyData(formateMonthlyDataPoints(monthlySales));
+    }
+  }, [monthlySales]);
+  
+  useEffect(() => {
+    if (yearlySales?.length > 0) {
+      setYearlyData(formateYearlyDataPoints(yearlySales));
+    }
+  }, [yearlySales]);
 
   return (
     <Fragment>
@@ -125,15 +124,23 @@ const ChartComponent = () => {
 
           <Col smd={12} md={12}>
             <Card>
+              <HeaderCard title="Sold Products Stats" mainClasses={'d-flex justify-content-between'}/>
               <CardBody>
-                <Chart dataPoints={monthlyData} type={"Monthly"} valueFormatString={'MMM'}/>
+                <DataTableComponent/>
               </CardBody>
             </Card>
           </Col>
           <Col smd={12} md={12}>
             <Card>
               <CardBody>
-                <Chart type={'Yearly'} dataPoints={yearlyData} valueFormatString={'YYYY'}/>
+                <Chart dataPoints={monthlyData} type={"Monthly"}/>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col smd={12} md={12}>
+            <Card>
+              <CardBody>
+                <Chart type={'Yearly'} dataPoints={yearlyData} />
               </CardBody>
             </Card>
           </Col>
@@ -142,5 +149,8 @@ const ChartComponent = () => {
     </Fragment>
   );
 };
+
+
+
 
 export default ChartComponent;

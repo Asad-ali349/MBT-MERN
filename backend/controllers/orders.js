@@ -31,8 +31,6 @@ export const CreateOrder=async (req,res)=>{
         console.error('Error creating order:', error);
         return res.status(500).json({ message: error });
     }
-    //   console.log(req.body);
-    //   res.send("hello");
 }
 
 export const GetAllOrders=async (req,res)=>{
@@ -48,10 +46,6 @@ export const GetAllOrders=async (req,res)=>{
             // Set the time to 3 PM
             startDate.setHours(10, 0, 0, 0); //  10AM = 3pm on server
         } else {
-            // if(now.getHours()){
-
-            // }
-            console.log(now.getHours())
             startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0, 0); // 3 PM on the 1st of the month
         }
 
@@ -65,7 +59,6 @@ export const GetAllOrders=async (req,res)=>{
         } else {
             endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day
         }
-        console.log(startDate,endDate)
 
         const orderType= req.params.orderType
         const orderBy=req.user_id;
@@ -193,32 +186,30 @@ export const DeleteOrder= async (req,res)=>{
 
 export const GetProductStats = async (req, res) => {
     try {
-        const { start, end } = req.query;
+        const { date } = req.query;
 
         // Create a new Date object for the current date
         const now = new Date();
-
         // If start date is provided, use it; otherwise, set to the first day of the current month at 3 PM
         let startDate;
-        if (start) {
-            startDate = new Date(start);
-            // Set the time to 10 AM
-            startDate.setHours(10, 0, 0, 0); // 10AM = 3pm on server
+        if (date) {
+            startDate = new Date(date);
+            // Set the time to 3 PM
+            startDate.setHours(10, 0, 0, 0); //  10AM = 3pm on server
         } else {
             startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0, 0); // 3 PM on the 1st of the month
         }
 
         // If end date is provided, use it; otherwise, set to 7 AM of the next day
         let endDate;
-        if (end) {
-            endDate = new Date(end);
-            // Set the time to 6 AM of the next day
+        if (date) {
+            endDate = new Date(date);
+            // Set the time to 7 AM of the next day
             endDate.setHours(6, 0, 0, 0); // 6 AM
             endDate.setDate(endDate.getDate() + 1); // Next day
         } else {
             endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 7, 0, 0, 0); // 7 AM of the next day
         }
-
 
 
         // Aggregation pipeline to calculate the total quantity sold for each product

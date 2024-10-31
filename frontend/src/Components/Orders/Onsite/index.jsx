@@ -10,10 +10,6 @@ import { GetOnsiteOrder } from '../../../Redux/Slices/OnsiteOrderSlice';
 const DataTables = () => {
   const navigate=useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [filter,SetFilter]=useState({
-    start:'',
-    end:''
-  })
   const openModal = () => {
     setShowModal(true);
   };
@@ -36,14 +32,14 @@ const DataTables = () => {
               </CardBody>
             </Card>
           </Col>
-          <ProfileModal showModal={showModal} closeModal={closeModal} filter={filter}/>
+          <FilterModal showModal={showModal} closeModal={closeModal}/>
         </Row>
       </Container>
     </Fragment>
   );
 };
 
-const ProfileModal = ({ showModal, closeModal}) => {
+const FilterModal = ({ showModal, closeModal}) => {
   const dispatch= useDispatch()
   const handleSubmit=(e)=>{
     e.preventDefault();
@@ -51,7 +47,7 @@ const ProfileModal = ({ showModal, closeModal}) => {
     const formData = new FormData(e.target);
     const date = formData.get('date');
     dispatch(GetOnsiteOrder({date}))
-
+    closeModal()
    
   }
  

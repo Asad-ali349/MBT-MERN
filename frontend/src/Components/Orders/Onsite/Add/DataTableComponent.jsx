@@ -6,7 +6,7 @@ import {  Col, Row, Spinner } from "reactstrap";
 import { MdDelete } from "react-icons/md";
 import { CreateOnsiteOrder, GetSingleOnsiteOrder, OnsiteOrdersActions, UpdateSingleOnsiteOrder } from "../../../../Redux/Slices/OnsiteOrderSlice";
 import { useParams } from "react-router";
-import Logo from "../../../../assets/Logo/logo.png";
+import Logo from "../../../../assets/Logo/logo.svg";
 import { toast } from "react-toastify";
 const DataTableComponent = () => {
   const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,gst_percentage,customer, is_Service } = useSelector(

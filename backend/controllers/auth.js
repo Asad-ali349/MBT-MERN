@@ -89,7 +89,7 @@ export const Signup= async (req, res)=>{
   const {email,password}=req.body;
   const user=req.body;
   try{
-      const { error, value } = addUserSchema.validate(req.body);
+      const { error } = addUserSchema.validate(req.body);
 
       if (error) {
           return res.status(400).json({ message: error.details[0].message });
@@ -150,9 +150,6 @@ export const Signup= async (req, res)=>{
   }
 }
 
-
-
-
 export const ForgotPassword = async (req, res) => {
   
     const { email } = req.body;
@@ -160,8 +157,6 @@ export const ForgotPassword = async (req, res) => {
       const existingUser = await Users.findOne({ email });
       if (!existingUser)
         return res.status(201).json({ message: "invalid Email..." });
-      
-
 
       const token = randomString(10);
       await Users.findByIdAndUpdate(

@@ -12,6 +12,33 @@ export const fetchDashboardData = createAsyncThunk('fetchDashboardData', async (
     throw error;
   }
 });
+export const fetchProductStatData = createAsyncThunk('fetchProductStatData', async ({date}) => {
+  try {
+    let query='';
+    if(date){
+        query+=`?date=${date}`          
+    }else{
+        let todayDate = new Date();
+        const hours = todayDate.getHours();
+        
+        // If the time is before 6 AM, take the previous day's date
+        if (hours < 6) {
+            todayDate.setDate(todayDate.getDate() - 1);
+        }
+        
+        // Format the date as YYYY-MM-DD for the query string
+        const formattedDate = todayDate.toISOString().split('T')[0];
+        console.log(formattedDate)
+        query += `?date=${formattedDate}`;
+    }
+    console.log(query)
+    const response = await GET(`order/product-stats${query}`);
+    return response.data;
+  } catch (error) {
+    toast.error(error)
+    throw error;
+  }
+});
 
 const dashboardSlice = createSlice({
   name: 'Dashboard',
@@ -28,11 +55,11 @@ const dashboardSlice = createSlice({
     totalProducts: 0,
     totalCategories: 0,
     monthlySales:[],
-    yearlySales:[]
+    yearlySales:[],
+    productStats:[]
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchDashboardData.fulfilled, (state, action) => {
+    builder.addCase(fetchDashboardData.fulfilled, (state, action) => {
         state.loading = false;
         state.totalDiscountToday= action.payload.totalDiscountToday
         state.totalSalesToday= action.payload.totalSalesToday
@@ -52,10 +79,21 @@ const dashboardSlice = createSlice({
       .addCase(fetchDashboardData.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(fetchProductStatData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productStats= action.payload
+        
+      })
+      .addCase(fetchProductStatData.pending,(state) => {
+        state.loading = true;
+      })
+      .addCase(fetchProductStatData.rejected, (state) => {
+        state.loading = false;
+      })
       
   },
 });
 
-export const tradeActions = dashboardSlice.actions;
+export const dashboardActions = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
