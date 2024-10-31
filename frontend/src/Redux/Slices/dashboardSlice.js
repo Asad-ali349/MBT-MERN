@@ -18,19 +18,17 @@ export const fetchProductStatData = createAsyncThunk('fetchProductStatData', asy
     if(date){
         query+=`?date=${date}`          
     }else{
-        let todayDate = new Date();
-        const hours = todayDate.getHours();
-        
-        // If the time is before 6 AM, take the previous day's date
-        if (hours < 6) {
-            todayDate.setDate(todayDate.getDate() - 1);
-        }
-        
-        // Format the date as YYYY-MM-DD for the query string
-        const formattedDate = todayDate.toISOString().split('T')[0];
-        
-        query += `?date=${formattedDate}`;
-    }
+      let todayDate = new Date();
+      const hours = todayDate.getHours();
+      
+      // If the time is before 6 AM, take the previous day's date
+      if (hours < 6) {
+          console.log('less Than 6')
+          todayDate.setDate(todayDate.getDate()-1);
+      }
+      
+      query += `?date=${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`;
+  }
     
     const response = await GET(`order/product-stats${query}`);
     return response.data;

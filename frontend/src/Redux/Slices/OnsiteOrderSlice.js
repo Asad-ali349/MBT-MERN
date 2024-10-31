@@ -58,12 +58,11 @@ export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
             
             // If the time is before 6 AM, take the previous day's date
             if (hours < 6) {
-                todayDate.setDate(todayDate.getDate() - 1);
+                console.log('less Than 6')
+                todayDate.setDate(todayDate.getDate()-1);
             }
             
-            // Format the date as YYYY-MM-DD for the query string
-            const formattedDate = todayDate.toISOString().split('T')[0];
-            query += `?date=${formattedDate}`;
+            query += `?date=${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`;
         }
         
         const orders=await GET(`order/onsite${query}`);
