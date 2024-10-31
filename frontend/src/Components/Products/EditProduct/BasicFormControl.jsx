@@ -29,7 +29,6 @@ const BasicFormControlClass = () => {
         onSubmit: async (values) => {
                 dispatch(UpdateProduct(values))
                 // formik.resetForm();
-                console.log(values)
             },
        });
     useEffect(()=>{

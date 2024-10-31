@@ -98,7 +98,7 @@ export const UpdateCategory=async(req, res)=>{
         if (existingCategory)
             return res.status(400).json({ message:"Category already exit with given name..."});
         if(req.file){
-            console.log(req.file)
+            
             if (req.file || Object.keys(req.file).length !== 0){
                 const file = req.file; 
                 // uploading image to cloudnary

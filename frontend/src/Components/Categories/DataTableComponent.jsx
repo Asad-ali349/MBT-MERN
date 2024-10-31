@@ -2,17 +2,11 @@ import React, { Fragment, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { tableColumns } from './Defaultdata';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
 import { Spinner } from 'reactstrap';
-import { addTodaysStocks, fetchAllStocks, fetchTodaysStocks } from '../../Redux/Slices/todayspick';
-import { FaList } from "react-icons/fa6";
-import todaysPickUtils from '../../utils/todaysPickUtils';
 import EditCategory from './EditCategory'
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { deleteCategory, fetchAllCategories } from '../../Redux/Slices/categorySlice';
-
-
 
 
 const DataTableComponent = () => {

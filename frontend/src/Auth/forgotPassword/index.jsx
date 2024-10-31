@@ -16,7 +16,7 @@ const Signin = ({ selected }) => {
 
   const loginAuth = async (e) => {
     e.preventDefault();
-    console.log(email)
+  
     dispatch(forgotPassword({email}))
   };
 

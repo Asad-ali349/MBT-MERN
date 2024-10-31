@@ -27,7 +27,6 @@ const BasicFormControlClass = () => {
                 dispatch(addCategory(values)).then(()=>{
                     formik.resetForm();
                 });
-                console.log(values)
             },
        });
     return (

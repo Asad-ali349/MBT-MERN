@@ -19,7 +19,7 @@ export const createProducts=async (req,res)=>{
             return res.status(400).json({ message:"Product already exits..."});
 
         if(req.file){
-            console.log(req.file)
+            
             if (req.file || Object.keys(req.file).length !== 0){
                 const file = req.file; 
                 // uploading image to cloudnary
@@ -87,7 +87,6 @@ export const UpdateProduct=async(req, res)=>{
                 // uploading image to cloudnary
                 try{
                     if(product.image!=null && product.image!=""){
-                        console.log("product image is not null")
                         const publicIdToDelete = fileData.path.public_id;
                         const respurse_deleted = await cloudinary.v2.api.delete_resources([publicIdToDelete],{ type: 'upload', resource_type: 'raw' });
                     }

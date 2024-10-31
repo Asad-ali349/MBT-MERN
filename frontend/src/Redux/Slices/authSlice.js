@@ -55,7 +55,7 @@ export const changePassword = createAsyncThunk(CHANGEPASSWORD, async (data) => {
     if(data.new_password!=data.confirm_password){
       throw "New Password and Confirm must be same";
     }
-    console.log(data)
+
     const response = await UPDATE(`user/change_password`,data);
     toast.success("Passsword Updated Sucessfully...");
     return response.data;

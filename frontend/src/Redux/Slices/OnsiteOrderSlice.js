@@ -67,7 +67,7 @@ export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
         }
         
         const orders=await GET(`order/onsite${query}`);
-        console.log(orders.data)
+        
         return orders.data;
     } catch (error) {
         toast.error(error)

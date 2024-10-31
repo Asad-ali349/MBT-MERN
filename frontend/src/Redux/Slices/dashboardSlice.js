@@ -28,10 +28,10 @@ export const fetchProductStatData = createAsyncThunk('fetchProductStatData', asy
         
         // Format the date as YYYY-MM-DD for the query string
         const formattedDate = todayDate.toISOString().split('T')[0];
-        console.log(formattedDate)
+        
         query += `?date=${formattedDate}`;
     }
-    console.log(query)
+    
     const response = await GET(`order/product-stats${query}`);
     return response.data;
   } catch (error) {

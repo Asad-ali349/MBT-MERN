@@ -51,7 +51,6 @@ const BasicFormControlClass = () => {
         product.quantity = Number(values.quantity); // Ensure quantity exists
         product.totalPrice = product.price * product.quantity;
         dispatch(OnsiteOrdersActions.addProduct(product));
-        console.log(product);
         formik.resetForm();
       } else {
         console.error("Product not found.");

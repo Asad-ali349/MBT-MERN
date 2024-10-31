@@ -5,15 +5,13 @@ import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import "./styless.css";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSingleOnsiteOrder } from "../../Redux/Slices/OnsiteOrderSlice";
-import Logo from "../../assets/Logo/logo.png";
-const columns = ["Item Name", "Rate", "Qty", "Amount"];
+import Logo from "../../assets/Logo/logo.svg";
 
 export default function Receipt() {
   const {
     OnsiteOrderloading,
     products,
     totalPrice,
-    gst,
     grandTotal,
     discount,
     customer,

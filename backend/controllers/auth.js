@@ -209,7 +209,7 @@ export const UserForgotPassword = async (req, res) => {
                     <h3>OPT: ${otp}</h3>
                     </body>
                     </html>`
-                    console.log(message)
+                    
         
       SendEmail(existingUser.email,"Forgot Password",message);
 

@@ -38,7 +38,6 @@ const BasicFormControlClass = () => {
                     formik.resetForm();
                 });
                 // formik.resetForm();
-                console.log(values)
             },
        });
     useEffect(()=>{

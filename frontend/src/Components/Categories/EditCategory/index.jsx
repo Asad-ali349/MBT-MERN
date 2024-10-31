@@ -22,7 +22,6 @@ export default function Index({modalData,showModal,closeModal}) {
         validationSchema: validationSchema,
      
         onSubmit: async (values) => {
-            console.log(values)
             dispatch(UpdateCategory(values)).then(()=>{
                 formik.resetForm();
                 closeModal();

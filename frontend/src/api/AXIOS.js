@@ -25,7 +25,7 @@ export const POST = async (url,data) => {
 export const POSTFILE = async (url,data) => {
   try {
     const token = localStorage.getItem('token');
-    console.log(token)
+    
     const response = await axios.post(
       process.env.REACT_APP_BACKEND_URL+url, 
       data,
@@ -90,13 +90,13 @@ export const DELETE = async (url) => {
 
 export const PATCHFILE = async (url,data,loading) => {
   try {
-    console.log(url)
+    
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Token not found in local storage');
     }
 
-    console.log('Token:', token);
+  
 
     const response = await axios.patch(
       process.env.REACT_APP_BACKEND_URL + url,

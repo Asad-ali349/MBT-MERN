@@ -260,7 +260,6 @@ const removeTmp = (path) =>{
 
 export const ChangePassword = async (req,res) => {
     
-    console.log(req.body)
     const {user_id}=req;
     const {old_password,new_password}=req.body;
     try{

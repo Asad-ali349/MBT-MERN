@@ -31,7 +31,7 @@ export const addProduct = createAsyncThunk(ADD_PRRODUCT, async (data) => {
 
 export const UpdateProduct = createAsyncThunk(UPDATE_PRRODUCT, async (data) => {
   try {
-    console.log(data)
+    
     const response = await PATCHFILE('product/'+data._id,data);
     toast.success("Product updated Sucessfully....");
   } catch (error) {

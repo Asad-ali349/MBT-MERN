@@ -42,7 +42,6 @@ const BasicFormControlClass = () => {
         validationSchema: validationSchema,
      
         onSubmit: async (values) => {
-            console.log('submit')
             dispatch(updateProfile(values));
         },
        });
