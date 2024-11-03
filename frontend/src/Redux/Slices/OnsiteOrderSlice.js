@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from "react-toastify";
-import { DELETE, GET, PATCHFILE, POST, POSTFILE, UPDATE } from '../../api/AXIOS';
+import { DELETE, GET, POST, UPDATE } from '../../api/AXIOS';
 
 const calculateTotalPrice = (products) => {
     return products.reduce((total, product) => total + parseFloat(product.totalPrice), 0);
@@ -129,7 +129,7 @@ const initialState={
     orders:[],
     orderNumber:"",
     createdAt:"",
-    status:""
+    status:"pending"
 }
 
 const OnsiteOrders = createSlice({
@@ -191,25 +191,31 @@ const OnsiteOrders = createSlice({
         },
         updateIsService:(state)=>{
             state.is_Service = !state.is_Service;
-            if(state.is_Service && state.payment_method=="cash"){
+            if(!state.is_Service){
+                state.status = "completed"
+            }else{
+                state.status = "pending"
+            }
+            if(state.is_Service && state.payment_method==="cash"){
                 // state.gst_percentage = 0.14
                 state.gst_percentage = 0
             }
-            else if(state.is_Service && state.payment_method=="online"){
+            else if(state.is_Service && state.payment_method==="online"){
                 state.gst_percentage=0
                 // state.gst_percentage=0.04
             }else{
                 state.gst_percentage=0
             }
+
             state.gst = calculateGST(state.totalPrice,state.is_Service,state.gst_percentage);
         },
         updatePaymentMethod:(state)=>{
-            state.payment_method = state.payment_method=="cash"?"online":"cash";
-            if(state.is_Service && state.payment_method=="cash"){
+            state.payment_method = state.payment_method==="cash"?"online":"cash";
+            if(state.is_Service && state.payment_method==="cash"){
                 // state.gst_percentage=0.14
                 state.gst_percentage=0
             }
-            else if(state.is_Service && state.payment_method=="online"){
+            else if(state.is_Service && state.payment_method==="online"){
                 // state.gst_percentage=0.04
                 state.gst_percentage=0
             }else{
@@ -217,6 +223,9 @@ const OnsiteOrders = createSlice({
             }
             state.gst = calculateGST(state.totalPrice,state.is_Service,state.gst_percentage);
             state.grandTotal = calculateGrandTotal(state.totalPrice, state.gst, state.discount);
+        },
+        updateOrderStatus:(state)=>{
+            state.status = state.status==="pending"?"completed":"pending";
         },
         updateCustomer:(state,action)=>{
             state.customer={...state.customer,...action.payload};
@@ -256,6 +265,7 @@ const OnsiteOrders = createSlice({
                 name:"",
                 phone:"",
             }
+            state.status = "pending"
         }).addCase(CreateOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
         }).addCase(CreateOnsiteOrder.rejected,(state)=>{
@@ -281,6 +291,7 @@ const OnsiteOrders = createSlice({
             state.is_Service=action.payload.is_Service
             state.status=action.payload.status
             state.createdAt=action.payload.createdAt
+
         }).addCase(GetSingleOnsiteOrder.pending,(state)=>{
             state.OnsiteOrderloading=true;
             state.products = []

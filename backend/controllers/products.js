@@ -52,7 +52,7 @@ export const createProducts=async (req,res)=>{
 
 export const GetProducts= async (req,res)=>{
     try {
-        const products= await Products.find().populate('category_id');
+        const products= await Products.find().populate('category_id').sort({ createdAt: -1 });;
         return res.status(200).json(products);
     } catch (error) {
         // If an error occurs during the process, return a 500 status with the error message

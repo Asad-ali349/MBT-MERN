@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import Logo from "../../../../assets/Logo/logo.svg";
 import { toast } from "react-toastify";
 const DataTableComponent = () => {
-  const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,gst_percentage,customer, is_Service } = useSelector(
+  const { OnsiteOrderloading, products, totalPrice,gst,grandTotal,discount,payment_method,customer, is_Service,status } = useSelector(
     (state) => state.OnsiteOrders
   );
   const {orderId}=useParams()
@@ -55,14 +55,13 @@ const DataTableComponent = () => {
       toast.error("Add Products to Proceed")
       return
     }
-    let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method,is_Service}
+    let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method,is_Service,status}
     if(orderId){
       dispatch(UpdateSingleOnsiteOrder({orderId,data}));
     }else{
       dispatch(CreateOnsiteOrder(data)).then((response)=>{
         if(response.type==="CreateOnsiteOrder/fulfilled"){
           handlePrint(response.payload.order,Logo)
-        
         }
       });
     }
@@ -324,10 +323,18 @@ const DataTableComponent = () => {
                   <th>Payment Method</th>
                   <td>
                     <div className="d-flex justify-content-between">
-                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updatePaymentMethod())} style={{cursor:'pointer'}}><input type="radio" name="payment_method" checked={payment_method=="cash"}/> Cash</div>
-                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updatePaymentMethod())} style={{cursor:'pointer'}}><input type="radio" name="payment_method" id="" checked={payment_method=="online"}/> Online</div>
+                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updatePaymentMethod())} style={{cursor:'pointer'}}><input type="radio" name="payment_method" checked={payment_method==="cash"}/> Cash</div>
+                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updatePaymentMethod())} style={{cursor:'pointer'}}><input type="radio" name="payment_method" checked={payment_method==="online"}/> Online</div>
                     </div> 
-
+                  </td>
+                </tr>
+                <tr>
+                  <th>Order status</th>
+                  <td>
+                    <div className="d-flex justify-content-between">
+                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updateOrderStatus())} style={{cursor:'pointer'}}><input type="radio" name="status" checked={status==="pending"}/> Pending</div>
+                      <div className='mx-1' onClick={()=>dispatch(OnsiteOrdersActions.updateOrderStatus())} style={{cursor:'pointer'}}><input type="radio" name="status" checked={status==="completed"}/> Completed</div>
+                    </div> 
                   </td>
                 </tr>
 
@@ -342,8 +349,17 @@ const DataTableComponent = () => {
               </table>
             </Col>
           </Row>
-          <button className="btn btn-primary float-end mt-4" onClick={handleSubmit}  disabled={OnsiteOrderloading}>
-            {OnsiteOrderloading?"Placing Order....":"Confirm Order"}
+
+          <button 
+            className="btn btn-primary float-end mt-4" 
+            onClick={handleSubmit}  
+            disabled={OnsiteOrderloading}
+          >
+            {OnsiteOrderloading ? (
+              orderId ? "Updating Order..." : "Placing Order..."
+            ) : (
+              orderId ? "Update Order" : "Place Order"
+            )}
           </button>
         </>
       )}

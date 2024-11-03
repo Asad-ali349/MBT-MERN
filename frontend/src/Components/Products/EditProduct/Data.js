@@ -37,5 +37,11 @@ export const Data = [
         type:"file",
         name :"image"
      },
+     {
+      title:"Availabilty Status",
+      placeholder: "Availabilty Status", 
+      type:"select",
+      name :"status"
+   },
 ]
 

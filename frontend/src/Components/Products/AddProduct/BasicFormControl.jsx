@@ -9,8 +9,6 @@ import {useSelector,useDispatch} from 'react-redux';
 import { addProduct } from '../../../Redux/Slices/productSlice';
 import { fetchAllCategories } from '../../../Redux/Slices/categorySlice';
 
-
-
 const BasicFormControlClass = () => {
     const {loading}=useSelector(state=>state.products);
     const {categories}=useSelector(state=>state.categories);
@@ -21,6 +19,7 @@ const BasicFormControlClass = () => {
         price:yup.string().required(),
         description:yup.string().required(),
         image: yup.string().required(),
+        status: yup.string().required(),
     });
 
     const formik = useFormik({
@@ -31,6 +30,7 @@ const BasicFormControlClass = () => {
             description:'',
             discount:'',
             image: '', 
+            status:''
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -60,15 +60,24 @@ const BasicFormControlClass = () => {
                                         <Input className="form-control" id="fileInput"  name={item.name} type={item.type} onChange= {(e) => formik.setFieldValue(item.name, e.currentTarget.files[0]) } />
                                     </>
                                    : item.type ==='select' ?(
-                                    
-                                    <select name={item.name} id="" value={formik.values[item.name]} onBlur={formik.handleBlur} onChange={formik.handleChange } className='form-control'>
-                                        <option value="">Select Category</option>
-                                        {
-                                            categories.map((category)=>(
-                                                <option value={category._id}>{category.name}</option>
-                                            ))
-                                        }
-                                    </select>
+                                        item.name === 'status'? (
+                                            <select name={item.name} id="" value={formik.values[item.name]} onBlur={formik.handleBlur} onChange={formik.handleChange } className='form-control'>
+                                                <option value="">Select Status</option>
+                                                <option value="available">Available</option>
+                                                <option value="notAvailble">Not Available</option>
+                                                
+                                            </select>
+                                        ) : 
+                                        item.name==='category_id'?(
+                                            <select name={item.name} id="" value={formik.values[item.name]} onBlur={formik.handleBlur} onChange={formik.handleChange } className='form-control'>
+                                                <option value="">Select Category</option>
+                                                {
+                                                    categories.map((category)=>(
+                                                        <option value={category._id}>{category.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        ):''
                                    ):item.name ==='description' ?(
                                     <textarea name="description" className='form-control' rows="5" onBlur={formik.handleBlur} onChange={formik.handleChange }>{formik.values[item.name]}</textarea>
                                    ):

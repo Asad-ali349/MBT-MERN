@@ -18,7 +18,6 @@ const ProductSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-   
     image:{
         type:Object,
         default:null
@@ -26,6 +25,11 @@ const ProductSchema = new mongoose.Schema({
     discount:{
         type:String,
         default:null
+    },
+    status:{
+        type: String,
+        enum:['available', 'notAvailable'],
+        default:'available'
     }
 },{
     timestamps:true

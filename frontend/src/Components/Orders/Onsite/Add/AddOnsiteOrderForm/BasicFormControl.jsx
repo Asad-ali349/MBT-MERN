@@ -57,7 +57,7 @@ const BasicFormControlClass = () => {
       }
     },
   });
-  const transformedProducts = products.map((product) => {
+  const transformedProducts = products.filter(product=> product.status==="available").map((product) => {
     return {
       value: product._id,
       label: product.name,

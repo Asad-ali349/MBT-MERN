@@ -26,6 +26,12 @@ export const tableColumns = [
         center: true,
     },
     {
+        name: 'Order Time',
+        selector: row => row['orderTime'],
+        sortable: false,
+        center: true,
+    },
+    {
         name: 'Order Status',
         selector: row => row['orderStatus'],
         sortable: false,

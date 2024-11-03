@@ -14,7 +14,6 @@ import { DeleteOnsiteOrder, GetOnsiteOrder } from '../../../Redux/Slices/OnsiteO
 const DataTableComponent = () => {
     const {loading,orders}=useSelector(state=>state.OnsiteOrders);
     const dispatch = useDispatch();
-    const Navigate = useNavigate();
     
     const handleDelete = (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this Order?");
@@ -33,6 +32,18 @@ const DataTableComponent = () => {
         });
         return formattedDate
     }
+    const formatTime = (dateStr) => {
+        const date = new Date(dateStr);
+    
+        // Format the time to '3:00 pm'
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        });
+    
+        return formattedTime;
+    };
     const categoriesRow = orders.map((item, index) => ({
         id: index,
         orderNumber: item.orderNumber,
@@ -40,6 +51,7 @@ const DataTableComponent = () => {
         paymentMethod: item.paymentMethod,
         grandTotal: item.grandTotal,
         orderDate: formateDate(item.createdAt),
+        orderTime: formatTime(item.createdAt),
         Action: <>
             <Link to={`/onsite_orders/update/${item._id}`}><FaEdit style={{fontSize:'20px',color:'blue',cursor:'pointer',marginInline:'10px'}}/></Link>
             <MdDelete style={{fontSize:'20px',color:'red',cursor:'pointer', marginInline:'10px'}}  onClick={()=>handleDelete(item._id)}/>
