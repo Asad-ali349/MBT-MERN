@@ -33,10 +33,10 @@ export default function Receipt() {
 
   const handlePrint = () => {
     const printContent = printRef.current;
-    const printWindow = window.open("", "", "width=302");
+    // const printWindow = window.open("", "", "width=302");
 
     // Write the HTML content into the new window
-    printWindow.document.write(`
+    const PrintData = `
       <html>
         <head>
           <title>Print Preview</title>
@@ -127,17 +127,136 @@ export default function Receipt() {
           ${printContent.outerHTML}
         </body>
       </html>
-    `);
+    `;
 
-    // Close the document to trigger the loading of styles
-    printWindow.document.close();
-
-    // Trigger the print dialog
-    printWindow.print();
-
-    // Close the print window after printing
-    printWindow.onafterprint = () => printWindow.close();
+    // Create an iframe
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0px";
+    iframe.style.height = "0px";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
+  
+    // Write the HTML content to the iframe
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(PrintData);
+    iframe.contentDocument.close();
+  
+    // Trigger print within the iframe
+    iframe.contentWindow.print();
+  
+    // Remove the iframe after printing
+    iframe.onafterprint = () => {
+      document.body.removeChild(iframe);
+    };
   };
+  // const handlePrint = () => {
+  //   const printContent = printRef.current;
+  //   const printWindow = window.open("", "", "width=302");
+
+  //   // Write the HTML content into the new window
+  //   printWindow.document.write(`
+  //     <html>
+  //       <head>
+  //         <title>Print Preview</title>
+          
+  //         <style>
+  //           .receipt-header h1 {
+  //             color: red;
+  //             font-size: 60px;
+  //           }
+  //             .qty{
+  //               text-align: center;
+  //               width:16%
+  //             }
+  //           .receipt-header .receipt-info span {
+  //             display: block;
+  //           }
+  //             .ItemName{
+  //             text-align: left;
+  //             font-size:18px;
+  //             white-space: nowrap; /* Prevent wrapping */
+  //             // width: 40%; /* Flexibly allocate width */
+  //             }
+  //             .orderNumber{
+  //             color: black;
+  //             display: inline !important;
+  //             font-weight: 800;
+  //             font-size: 20px;
+  //             }
+          
+  //           .receipt-body {
+  //             margin-top: 10px;
+  //             border-bottom:1px solid black;
+  //           }
+  //           .receipt-body table {
+  //             width: 100%;
+  //             border-collapse: collapse;
+  //             margin-bottom: 20px;
+  //           }
+  //           .receipt-body table th,
+  //           .receipt-body table td {
+  //             padding: 5px 5px;
+  //           }
+  //           thead {
+  //             border-bottom: 1px solid black !important;
+  //             border-top: 1px solid black !important;
+  //           }
+  //           .receipt-body table th {
+  //             color: black;
+  //             font-weight: 600;
+  //           }
+  //           .receipt-footer {
+  //             margin-top: 10px;
+  //             position: relative;
+  //           }
+  //           .receipt-footer div {
+  //             display: flex;
+  //             justify-content: flex-end;
+  //           }
+  //           .receipt-footer div table td {
+  //             padding: 5px;
+  //             font-size: 16px;
+  //           }
+  //           .receipt-footer div table .grandTotal td {
+  //             font-size: 20px !important;
+  //             font-weight: 700;
+  //           }
+  //           .ServiceType {
+  //             font-size: 26px;
+  //             margin-bottom: 10px;
+  //             margin-top: 20px;
+  //           }
+  //           .LogoImage {
+  //             width: 150px;
+  //             filter: grayscale(100%);
+  //             margin-top:-20px
+  //           }
+  //           .user-info {
+  //             display: flex;
+  //             justify-content: space-between;
+  //             font-size: 14px;
+  //           }
+  //           .customerInfo {
+  //             margin-top: 5px;
+  //           }
+  //            </style>
+  //       </head>
+  //       <body>
+  //         ${printContent.outerHTML}
+  //       </body>
+  //     </html>
+  //   `);
+
+  //   // Close the document to trigger the loading of styles
+  //   printWindow.document.close();
+
+  //   // Trigger the print dialog
+  //   printWindow.print();
+
+  //   // Close the print window after printing
+  //   printWindow.onafterprint = () => printWindow.close();
+  // };
   useEffect(() => {
     dispatch(GetSingleOnsiteOrder(orderId));
   }, [orderId]);

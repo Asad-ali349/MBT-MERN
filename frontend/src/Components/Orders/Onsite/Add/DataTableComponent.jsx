@@ -66,6 +66,8 @@ const DataTableComponent = () => {
       });
     }
   }
+
+
   const handlePrint = ({
     products,
     totalPrice,
@@ -76,8 +78,7 @@ const DataTableComponent = () => {
     orderNumber,
     is_Service,
     paymentMethod,
-     // Assuming this is a URL string for the logo
-  },Logo) => {
+  }, Logo) => {
     const rows = products.map((product, index) => ({
       id: index + 1,
       name: product.name,
@@ -85,15 +86,12 @@ const DataTableComponent = () => {
       quantity: product.quantity,
       totalPrice: product.totalPrice,
     }));
-
-    const printWindow = window.open("", "", "width=302");
-
-    // Create rows and columns for table
+  
     const tableHead = `
-    <th class="ItemName">Item Description</th>
-    <th>Qty</th>
-    <th>Rate</th>
-    <th>Amount</th>
+      <th class="ItemName">Item Description</th>
+      <th>Qty</th>
+      <th>Rate</th>
+      <th>Amount</th>
     `;
     const tableBody = rows.map((item) => `
       <tr>
@@ -103,92 +101,30 @@ const DataTableComponent = () => {
         <td class="qty">${item.totalPrice}</td>
       </tr>`).join("");
   
-    // Write the HTML content into the new window
-    printWindow.document.write(`
+    const receiptHtml = `
       <html>
         <head>
           <title>Print Preview</title>
           <style>
-            .receipt-header h1 {
-              color: red;
-              font-size: 60px;
-            }
-              .qty{
-                text-align: center;
-                width:16%
-              }
-            .receipt-header .receipt-info span {
-              display: block;
-            }
-              .ItemName{
-              text-align: left;
-              font-size:18px;
-              white-space: nowrap; /* Prevent wrapping */
-              // width: 40%; /* Flexibly allocate width */
-              }
-              .orderNumber{
-              color: black;
-              display: inline;
-              font-weight: 800;
-              font-size: 20px;
-              }
-          
-            .receipt-body {
-              // margin-top: 20px;
-              border-bottom:1px solid black;
-            }
-            .receipt-body table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 20px;
-            }
-            .receipt-body table th,
-            .receipt-body table td {
-              padding: 5px 5px;
-            }
-            thead {
-              border-bottom: 1px solid black !important;
-              border-top: 1px solid black !important;
-            }
-            .receipt-body table th {
-              color: black;
-              font-weight: 600;
-            }
-            .receipt-footer {
-              margin-top: 10px;
-              position: relative;
-            }
-            .receipt-footer div {
-              display: flex;
-              justify-content: flex-end;
-            }
-            .receipt-footer div table td {
-              padding: 5px;
-              font-size: 16px;
-            }
-            .receipt-footer div table .grandTotal td {
-              font-size: 20px !important;
-              font-weight: 700;
-            }
-            .ServiceType {
-              font-size: 26px;
-              margin-bottom: 10px;
-              margin-top: 20px;
-            }
-            .LogoImage {
-              width: 150px;
-              filter: grayscale(100%);
-              margin-top:-20px
-            }
-            .user-info {
-              display: flex;
-              justify-content: space-between;
-              font-size: 14px;
-            }
-            .customerInfo {
-              margin-top: 5px;
-            }
-             
+            /* Add your CSS here */
+            .receipt-header h1 { color: red; font-size: 60px; }
+            .qty { text-align: center; width:16% }
+            .receipt-header .receipt-info span { display: block; }
+            .ItemName { text-align: left; font-size:18px; white-space: nowrap; }
+            .orderNumber { color: black; display: inline; font-weight: 800; font-size: 20px; }
+            .receipt-body { border-bottom:1px solid black; }
+            .receipt-body table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            .receipt-body table th, .receipt-body table td { padding: 5px 5px; }
+            thead { border-bottom: 1px solid black !important; border-top: 1px solid black !important; }
+            .receipt-body table th { color: black; font-weight: 600; }
+            .receipt-footer { margin-top: 10px; position: relative; }
+            .receipt-footer div { display: flex; justify-content: flex-end; }
+            .receipt-footer div table td { padding: 5px; font-size: 16px; }
+            .receipt-footer div table .grandTotal td { font-size: 20px !important; font-weight: 700; }
+            .ServiceType { font-size: 26px; margin-bottom: 10px; margin-top: 20px; }
+            .LogoImage { width: 150px; filter: grayscale(100%); margin-top:-20px }
+            .user-info { display: flex; justify-content: space-between; font-size: 14px; }
+            .customerInfo { margin-top: 5px; }
           </style>
         </head>
         <body>
@@ -240,21 +176,219 @@ const DataTableComponent = () => {
           </div>
         </body>
       </html>
-    `);
+    `;
   
-    // Close the document to trigger the loading of styles
-    printWindow.document.close();
+    // Create an iframe
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0px";
+    iframe.style.height = "0px";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
   
-    // Trigger the print dialog
-    printWindow.print();
+    // Write the HTML content to the iframe
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(receiptHtml);
+    iframe.contentDocument.close();
   
-    // Close the print window after printing
-    printWindow.onafterprint = () => {
-      printWindow.close()
+    // Trigger print within the iframe
+    iframe.contentWindow.print();
+  
+    // Remove the iframe after printing
+    iframe.onafterprint = () => {
+      document.body.removeChild(iframe);
     };
+  };
+  
+  // const handlePrint = ({
+  //   products,
+  //   totalPrice,
+  //   gst,
+  //   grandTotal,
+  //   discount,
+  //   customer,
+  //   orderNumber,
+  //   is_Service,
+  //   paymentMethod,
+  //    // Assuming this is a URL string for the logo
+  // },Logo) => {
+  //   const rows = products.map((product, index) => ({
+  //     id: index + 1,
+  //     name: product.name,
+  //     price: product.price,
+  //     quantity: product.quantity,
+  //     totalPrice: product.totalPrice,
+  //   }));
+
+  //   const printWindow = window.open("", "", "width=302");
+
+  //   // Create rows and columns for table
+  //   const tableHead = `
+  //   <th class="ItemName">Item Description</th>
+  //   <th>Qty</th>
+  //   <th>Rate</th>
+  //   <th>Amount</th>
+  //   `;
+  //   const tableBody = rows.map((item) => `
+  //     <tr>
+  //       <td class="ItemName">${item.name}</td>
+  //       <td class="qty">${item.quantity}</td>
+  //       <td class="qty">${item.price}</td>
+  //       <td class="qty">${item.totalPrice}</td>
+  //     </tr>`).join("");
+  
+  //   // Write the HTML content into the new window
+  //   printWindow.document.write(`
+  //     <html>
+  //       <head>
+  //         <title>Print Preview</title>
+  //         <style>
+  //           .receipt-header h1 {
+  //             color: red;
+  //             font-size: 60px;
+  //           }
+  //             .qty{
+  //               text-align: center;
+  //               width:16%
+  //             }
+  //           .receipt-header .receipt-info span {
+  //             display: block;
+  //           }
+  //             .ItemName{
+  //             text-align: left;
+  //             font-size:18px;
+  //             white-space: nowrap; /* Prevent wrapping */
+  //             // width: 40%; /* Flexibly allocate width */
+  //             }
+  //             .orderNumber{
+  //             color: black;
+  //             display: inline;
+  //             font-weight: 800;
+  //             font-size: 20px;
+  //             }
+          
+  //           .receipt-body {
+  //             // margin-top: 20px;
+  //             border-bottom:1px solid black;
+  //           }
+  //           .receipt-body table {
+  //             width: 100%;
+  //             border-collapse: collapse;
+  //             margin-bottom: 20px;
+  //           }
+  //           .receipt-body table th,
+  //           .receipt-body table td {
+  //             padding: 5px 5px;
+  //           }
+  //           thead {
+  //             border-bottom: 1px solid black !important;
+  //             border-top: 1px solid black !important;
+  //           }
+  //           .receipt-body table th {
+  //             color: black;
+  //             font-weight: 600;
+  //           }
+  //           .receipt-footer {
+  //             margin-top: 10px;
+  //             position: relative;
+  //           }
+  //           .receipt-footer div {
+  //             display: flex;
+  //             justify-content: flex-end;
+  //           }
+  //           .receipt-footer div table td {
+  //             padding: 5px;
+  //             font-size: 16px;
+  //           }
+  //           .receipt-footer div table .grandTotal td {
+  //             font-size: 20px !important;
+  //             font-weight: 700;
+  //           }
+  //           .ServiceType {
+  //             font-size: 26px;
+  //             margin-bottom: 10px;
+  //             margin-top: 20px;
+  //           }
+  //           .LogoImage {
+  //             width: 150px;
+  //             filter: grayscale(100%);
+  //             margin-top:-20px
+  //           }
+  //           .user-info {
+  //             display: flex;
+  //             justify-content: space-between;
+  //             font-size: 14px;
+  //           }
+  //           .customerInfo {
+  //             margin-top: 5px;
+  //           }
+             
+  //         </style>
+  //       </head>
+  //       <body>
+  //         <div class="receipt">
+  //           <div class="receipt-header">
+  //             <div class="receipt-info" style="text-align:center;">
+  //               <img src="${Logo}" alt="Logo" class="LogoImage" />
+  //               <span><b>Address:</b> Main Pasroor Road, Opposite Govt College Boys, Satelite Town, Gujranwala</span>
+  //               <span><b>Phone #</b> 03217451009, 03200289000</span>
+  //             </div>
+  //             <div class="ServiceType">
+  //               <span><b>${is_Service ? "Dine In" : "Parcel"}</b></span>
+  //             </div>
+  //             <div class="user-info">
+  //               <div class="receipt-detail">
+  //                 <p class="OrderNumberContainer">
+  //                   <b>Order No:</b> <span class="orderNumber">${orderNumber}</span>
+  //                 </p>
+  //                 <p><b>Date:</b> 12-10-2024</p>
+  //               </div>
+  //               ${customer?.name ? `
+  //               <div class="customerInfo">
+  //                 <p><b>Name:</b> ${customer.name}</p>
+  //                 <p><b>Phone:</b> ${customer.phone}</p>
+  //               </div>` : ""}
+  //             </div>
+  //           </div>
+  //           <div class="receipt-body">
+  //             <table>
+  //               <thead>
+  //                 <tr>${tableHead}</tr>
+  //               </thead>
+  //               <tbody>
+  //                 ${tableBody}
+  //               </tbody>
+  //             </table>
+  //           </div>
+  //           <div class="receipt-footer">
+  //             <div>
+  //               <table>
+  //                 <tr><td class="heading">Sub-Total:</td><td>${totalPrice}</td></tr>
+  //                 <tr><td class="heading">Discount:</td><td>${discount}</td></tr>
+  //                 <tr><td class="heading">Payment:</td><td>${paymentMethod}</td></tr>
+  //                 <tr class="grandTotal"><td class="heading">Grand Total:</td><td>${grandTotal}</td></tr>
+  //               </table>
+  //             </div>
+  //             <center><h3>Thank You For Purchasing</h3></center>
+  //           </div>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   `);
+  
+  //   // Close the document to trigger the loading of styles
+  //   printWindow.document.close();
+  
+  //   // Trigger the print dialog
+  //   printWindow.print();
+  
+  //   // Close the print window after printing
+  //   printWindow.onafterprint = () => {
+  //     printWindow.close()
+  //   };
    
     
-  };
+  // };
   
   useEffect(()=>{
     if(orderId){
@@ -363,6 +497,8 @@ const DataTableComponent = () => {
           </button>
         </>
       )}
+
+     
     </Fragment>
   );
 };
