@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect} from "react";
+import React, { Fragment, useEffect, useRef} from "react";
 import DataTable from "react-data-table-component";
 import { tableColumns } from "./Defaultdata";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +14,7 @@ const DataTableComponent = () => {
   );
   const {orderId}=useParams()
   const dispatch = useDispatch();
+  const LogoRef=useRef();
 
   const handleDelete = (id) => {
     const confirmDelete = window.confirm(
@@ -86,7 +87,10 @@ const DataTableComponent = () => {
       quantity: product.quantity,
       totalPrice: product.totalPrice,
     }));
-  
+   
+    const logo = LogoRef.current;
+    const logoSrc = logo.src
+
     const tableHead = `
       <th class="ItemName">Item Description</th>
       <th>Qty</th>
@@ -131,7 +135,7 @@ const DataTableComponent = () => {
           <div class="receipt">
             <div class="receipt-header">
               <div class="receipt-info" style="text-align:center;">
-                <img src="${Logo}" alt="Logo" class="LogoImage" />
+                <img src="${logoSrc}" class="LogoImage" alt="Logo">
                 <span><b>Address:</b> Main Pasroor Road, Opposite Govt College Boys, Satelite Town, Gujranwala</span>
                 <span><b>Phone #</b> 03217451009, 03200289000</span>
               </div>
@@ -177,6 +181,8 @@ const DataTableComponent = () => {
         </body>
       </html>
     `;
+
+
   
     // Create an iframe
     const iframe = document.createElement("iframe");
@@ -420,6 +426,9 @@ const DataTableComponent = () => {
             pagination
           />
           <Row className="justify-content-between">
+            <Col xs={12} md={12}>
+              <img src={Logo} alt="Logo" class="LogoImage" style={{display:'none'}} ref={LogoRef}/>
+            </Col>
             <Col md={4}>
               
                 <div className="form-group mt-2">
