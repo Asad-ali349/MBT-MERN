@@ -6,12 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 
 import {Provider} from 'react-redux';
 import store from "./Redux/store";
+import { SocketProvider } from "./context/SocketContext";
 
 const Root = () => {
   return (
     <div className="App">
       <Provider store={store}>
-        <App />
+        <SocketProvider>
+          <App />
+        </SocketProvider>
       </Provider>
     </div>
   );

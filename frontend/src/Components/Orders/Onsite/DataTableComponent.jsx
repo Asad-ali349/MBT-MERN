@@ -7,6 +7,7 @@ import { Spinner } from 'reactstrap';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { DeleteOnsiteOrder, GetOnsiteOrder } from '../../../Redux/Slices/OnsiteOrderSlice';
+import { useSocket } from '../../../context/SocketContext';
 
 
 
@@ -14,6 +15,7 @@ import { DeleteOnsiteOrder, GetOnsiteOrder } from '../../../Redux/Slices/OnsiteO
 const DataTableComponent = () => {
     const {loading,orders}=useSelector(state=>state.OnsiteOrders);
     const dispatch = useDispatch();
+    const socket = useSocket();
     
     const handleDelete = (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this Order?");
@@ -58,10 +60,32 @@ const DataTableComponent = () => {
         </>
     }));
 
-    useEffect(()=>{
-        dispatch(GetOnsiteOrder({date:''}))
-        return ()=>{}
-    },[])
+    useEffect(() => {
+        dispatch(GetOnsiteOrder({date:''}));
+        
+        if (socket) {
+            // Listen for new orders
+            socket.on('newOrder', (newOrder) => {
+                if (newOrder.orderType === 'onsite') {
+                    dispatch(GetOnsiteOrder({date:''}));
+                }
+            });
+
+            // Listen for order status updates
+            socket.on('orderStatusUpdate', (updatedOrder) => {
+                if (updatedOrder.orderType === 'onsite') {
+                    dispatch(GetOnsiteOrder({date:''}));
+                }
+            });
+        }
+
+        return () => {
+            if (socket) {
+                socket.off('newOrder');
+                socket.off('orderStatusUpdate');
+            }
+        };
+    }, [socket, dispatch]);
 
     return (
         <Fragment>

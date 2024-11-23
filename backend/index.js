@@ -25,6 +25,8 @@ import orderRouter from "./routes/orders.js";
 
 
 import cloudinary from 'cloudinary';
+import { Server } from 'socket.io';
+import http from 'http';
 dotenv.config();
 
 cloudinary.config({
@@ -72,16 +74,32 @@ app.get("/", (req, res) => {
   res.send("<h1>Welcome to Mithu BBQ App API</h1>");
 });
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE']
+  }
+});
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
+});
 
 mongoose.connect(process.env.CONNECTION_URL) 
-.then(
-  () => app.listen(PORT, console.log(`Server running on port: ${PORT}`))
-).catch((err) => {
+.then(() => {
+  server.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+})
+.catch((err) => {
   console.log("Mongodb connection error", err);
 });
 
-
-
-
+// Make io accessible throughout the application
+export { io };
 
 export default app;

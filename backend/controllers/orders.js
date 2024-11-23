@@ -1,5 +1,6 @@
 import makePayment from "../Helper/payment.js";
 import Order from "../models/orders.js";
+import { io } from '../index.js';
 
 
 export const CreateOrder=async (req,res)=>{
@@ -25,6 +26,9 @@ export const CreateOrder=async (req,res)=>{
         if(!orderCreated){
             throw new Error("Unable to Create Order");
         }
+        
+        // Emit socket event for new order
+        io.emit('newOrder', orderCreated);
         
         res.status(200).json({message:"Order Placed Successfully...",order:orderCreated})
 
@@ -170,6 +174,9 @@ export const UpdateOrderStatus=async (req,res)=>{
         if(!updatedOrder){
            return res.status(400).json({message:'Order not found with given id'})
         }
+        
+        // Emit socket event for order status update
+        io.emit('orderStatusUpdate', updatedOrder);
         
         res.status(200).json({message:"Order Status Updated Successfully...",order:updatedOrder})
 
