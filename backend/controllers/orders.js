@@ -3,6 +3,7 @@ import Order from "../models/orders.js";
 
 
 export const CreateOrder=async (req,res)=>{
+    
     const orderDetails=req.body;
     const orderBy=req.user_id;
     try {
@@ -35,7 +36,13 @@ export const CreateOrder=async (req,res)=>{
 
 export const GetAllOrders=async (req,res)=>{
     try {
-        const { date } = req.query;
+        const { date, status } = req.query;
+        const validStatuses = ['pending', 'completed'];
+
+        // Validate status if provided
+        if (status && !validStatuses.includes(status)) {
+            return res.status(400).json({ message: "Invalid status. Must be either 'pending' or 'completed'" });
+        }
 
         // Create a new Date object for the current date
         const now = new Date();
@@ -63,19 +70,24 @@ export const GetAllOrders=async (req,res)=>{
         const orderType= req.params.orderType
         const orderBy=req.user_id;
         // const orders=await Order.find({orderType,orderBy})
+        const matchQuery = {
+            orderType,
+            createdAt: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        };
+
+        if (status) {
+            matchQuery.status = status;
+        }
+
         const orders=await Order.aggregate([
             {
-                $match:{
-                    orderType,
-                    // orderBy,
-                    createdAt: {
-                        $gte: startDate, // Greater than or equal to start date
-                        $lte: endDate // Less than or equal to end date
-                    }
-                }
+                $match: matchQuery
             },
             {
-                $sort: { createdAt: -1 } // Sort by createdAt in descending order
+                $sort: { createdAt: -1 }
             }
         ]);
 

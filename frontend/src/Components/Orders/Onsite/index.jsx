@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Container, Row, Col, Card, CardBody, Modal, ModalHeader, ModalBody, FormGroup, Input, Label, ModalFooter } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, Modal, ModalHeader, ModalBody, FormGroup, Input, Label, ModalFooter, Select } from 'reactstrap';
 import { Breadcrumbs } from '../../../AbstractElements';
 import HeaderCard from '../../Common/Component/HeaderCard';
 import DataTableComponent from './DataTableComponent';
@@ -46,7 +46,8 @@ const FilterModal = ({ showModal, closeModal}) => {
     // Extract form values using FormData
     const formData = new FormData(e.target);
     const date = formData.get('date');
-    dispatch(GetOnsiteOrder({date}))
+    const status = formData.get('status');
+    dispatch(GetOnsiteOrder({date,status}))
     closeModal()
    
   }
@@ -65,8 +66,20 @@ const FilterModal = ({ showModal, closeModal}) => {
                   name='date'
                   id='date'
                   placeholder='Enter Date'
-
                 />
+              </FormGroup>
+            </Col>
+            <Col md={12}>
+              <FormGroup>
+                <Label for='name'>Order Status</Label>
+                <select
+                  name='status'
+                  id='status'
+                  className='form-select'>
+                    <option value=''>All</option>
+                    <option value='pending'>Pending</option>
+                    <option value='completed'>Completed</option>
+                  </select>
               </FormGroup>
             </Col>
           </Row>

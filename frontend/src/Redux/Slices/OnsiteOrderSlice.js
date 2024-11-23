@@ -46,12 +46,14 @@ export const DeleteOnsiteOrder=createAsyncThunk('DeleteOnsiteOrder',async (order
     }
 })
 
-export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date})=>{
+export const GetOnsiteOrder=createAsyncThunk('GetOnsiteOrder',async ({date,status})=>{
 
     try {
         let query='';
         if(date){
             query+=`?date=${date}`          
+        }else if(status){
+            query+=`?status=${status}`
         }else{
             let todayDate = new Date();
             const hours = todayDate.getHours();
