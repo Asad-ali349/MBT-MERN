@@ -7,7 +7,8 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const backend_url = process.env.REACT_APP_ENV === 'local' ? 'http://localhost:5000' : 'https://mithu-butt-tikka-backend.vercel.app';
+    const backend_url = 'https://mithu-butt-tikka-backend.vercel.app';
+    // const backend_url = process.env.REACT_APP_ENV === 'local' ? 'http://localhost:5000' : 'https://mithu-butt-tikka-backend.vercel.app';
     console.log({backend_url})
     const newSocket = io(backend_url);
     console.log('newSocket',newSocket);
