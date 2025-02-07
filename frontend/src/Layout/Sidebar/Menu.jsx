@@ -16,6 +16,7 @@ export const MENUITEMS = [
             { path: '/online_orders', type: "link", title: "Online Order", id:'online' },
           ],
         },
+        { path: '/purchases', icon: "icofont-question-square",id:'purchase', title: "Purchases", type: "link" },
          { path: '/products', icon: "icofont-question-square",id:'products', title: "Products", type: "link" },
          { path: '/categories', icon: "icofont-ui-note",id:'categories', title: "Categories", type: "link" },
          

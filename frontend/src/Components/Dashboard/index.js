@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Container, Row, Col, Card, CardBody} from "reactstrap";
+import { Container, Row, Col, Card, CardBody } from "reactstrap";
 import Smallwidgets from "./Smallwidgets";
 import { Breadcrumbs } from "../../AbstractElements";
 import "./style.css";
@@ -10,27 +10,26 @@ import { useDispatch, useSelector } from "react-redux";
 import formateMonthlyDataPoints from "../../utils/formateMonthlyDataPoints";
 import formateYearlyDataPoints from "../../utils/formateYearlyDataPoints";
 import DataTableComponent from "./DataTableComponent";
-import HeaderCard from '../Common/Component/HeaderCard';
+import HeaderCard from "../Common/Component/HeaderCard";
+import PurchasedDataTableComponent from "./PurchasedDataTableComponent";
 
 const ChartComponent = () => {
   const dispatch = useDispatch();
 
-  const {yearlySales,monthlySales}=useSelector(state=>state.dashboard)
-  const [monthlyData,setMonthlyData]= useState([[],[]]);
-  const [yearlyData,setYearlyData]= useState([[],[]]);
-  
+  const { yearlySales, monthlySales } = useSelector((state) => state.dashboard);
+  const [monthlyData, setMonthlyData] = useState([[], []]);
+  const [yearlyData, setYearlyData] = useState([[], []]);
 
-  useEffect(()=>{
-    dispatch(fetchDashboardData())
-
-  },[])
+  useEffect(() => {
+    dispatch(fetchDashboardData());
+  }, []);
 
   useEffect(() => {
     if (monthlySales?.length > 0) {
       setMonthlyData(formateMonthlyDataPoints(monthlySales));
     }
   }, [monthlySales]);
-  
+
   useEffect(() => {
     if (yearlySales?.length > 0) {
       setYearlyData(formateYearlyDataPoints(yearlySales));
@@ -51,7 +50,10 @@ const ChartComponent = () => {
                       <h4 class="f-w-600">Welcome to Mithu Butt Shop</h4>
                       <p>Here whats happing in your account today</p>
                       <div class="whatsnew-btn">
-                        <Link class="btn btn-outline-white btn btn-outline-transparent" to={'/onsite_orders'}>
+                        <Link
+                          class="btn btn-outline-white btn btn-outline-transparent"
+                          to={"/onsite_orders"}
+                        >
                           Go To Orders
                         </Link>
                       </div>
@@ -115,7 +117,11 @@ const ChartComponent = () => {
                   </div>
                 </div>
                 <div class="cartoon">
-                  <img src="/svg/cartoon.svg" alt="vector women with leptop" class="media"/>
+                  <img
+                    src="/svg/cartoon.svg"
+                    alt="vector women with leptop"
+                    class="media"
+                  />
                 </div>
               </CardBody>
             </Card>
@@ -124,23 +130,37 @@ const ChartComponent = () => {
 
           <Col smd={12} md={12}>
             <Card>
-              <HeaderCard title="Sold Products Stats" mainClasses={'d-flex justify-content-between'}/>
+              <HeaderCard
+                title="Sold Products Stats"
+                mainClasses={"d-flex justify-content-between"}
+              />
               <CardBody>
-                <DataTableComponent/>
+                <DataTableComponent />
+              </CardBody>
+            </Card>
+          </Col>
+          <Col smd={12} md={12}>
+            <Card>
+              <HeaderCard
+                title="Purchase Stats"
+                mainClasses={"d-flex justify-content-between"}
+              />
+              <CardBody>
+                <PurchasedDataTableComponent />
               </CardBody>
             </Card>
           </Col>
           <Col smd={12} md={12}>
             <Card>
               <CardBody>
-                <Chart dataPoints={monthlyData} type={"Monthly"}/>
+                <Chart dataPoints={monthlyData} type={"Monthly"} />
               </CardBody>
             </Card>
           </Col>
           <Col smd={12} md={12}>
             <Card>
               <CardBody>
-                <Chart type={'Yearly'} dataPoints={yearlyData} />
+                <Chart type={"Yearly"} dataPoints={yearlyData} />
               </CardBody>
             </Card>
           </Col>
@@ -149,8 +169,5 @@ const ChartComponent = () => {
     </Fragment>
   );
 };
-
-
-
 
 export default ChartComponent;

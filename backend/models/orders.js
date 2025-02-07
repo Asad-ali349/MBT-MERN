@@ -16,7 +16,11 @@ const OrderSchema = new Schema({
         phone:{
             type:String,
             default:""
-        }
+        },
+        table_number:{
+            type:String,
+            default:""
+        }      
     },
     orderType: {
         type: String,

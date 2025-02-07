@@ -320,6 +320,14 @@ export default function Receipt() {
                             </span>
                           </div>
                         )}
+                        {customer?.table_number && (
+                          <div className="customerInfo">
+                            {/* <h5>Billed To</h5> */}
+                            <span>
+                              <b>Table No:</b> {customer?.table_number}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

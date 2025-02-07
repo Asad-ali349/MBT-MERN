@@ -12,7 +12,6 @@ const auth= async (req,res,next)=>{
         }
         let DecodedData= jwt.verify(authorization,"Signin");
         req.user_id=DecodedData?.id;
-        // console.log(req.body)
         next();
         
     }catch(error){  

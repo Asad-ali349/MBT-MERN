@@ -57,6 +57,7 @@ const DataTableComponent = () => {
       return
     }
     let data={products,totalPrice:Number(totalPrice),discount:Number(discount),gst:Number(gst),grandTotal:Number(grandTotal),customer,orderType:"onsite",paymentMethod:payment_method,is_Service,status}
+    
     if(orderId){
       dispatch(UpdateSingleOnsiteOrder({orderId,data}));
     }else{
@@ -153,6 +154,10 @@ const DataTableComponent = () => {
                 <div class="customerInfo">
                   <p><b>Name:</b> ${customer.name}</p>
                   <p><b>Phone:</b> ${customer.phone}</p>
+                </div>` : ""}
+                ${customer?.table_number ? `
+                <div class="customerInfo">
+                  <p><b>Table No:</b> ${customer.table_number}</p>
                 </div>` : ""}
               </div>
             </div>
@@ -430,7 +435,11 @@ const DataTableComponent = () => {
               <img src={Logo} alt="Logo" class="LogoImage" style={{display:'none'}} ref={LogoRef}/>
             </Col>
             <Col md={4}>
-              
+                
+                <div className="form-group mt-2">
+                  <label htmlFor="customer_name">Table No:</label>
+                  <input type="number" className="form-control" name="table_number" placeholder="Enter Table No." onChange={(e)=>dispatch(OnsiteOrdersActions.updateCustomer({table_number:e.target.value}))} value={customer?.table_number}/>
+                </div>
                 <div className="form-group mt-2">
                   <label htmlFor="customer_name">Customer Name</label>
                   <input type="text" className="form-control" name="customer_name" placeholder="Enter Customer Name" onChange={(e)=>dispatch(OnsiteOrdersActions.updateCustomer({name:e.target.value}))} value={customer?.name}/>

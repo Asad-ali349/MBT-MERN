@@ -1,28 +1,4 @@
-export const SoldProducts = [
-    
-    {
-        name: 'Product Name',
-        selector: row => row['productName'],
-        sortable: true,
-        center: false,
-    },
-    
-    {
-        name: 'Quantity',
-        selector: row => row['quantity'],
-        sortable: false,
-        center: true,
-    },
-    {
-        name: 'Revenue',
-        selector: row => row['revenue'],
-        sortable: false,
-        center: true,
-    },
-];
-
-
-export const purchaseProducts = [
+export const tableColumns = [
     {
         name: 'Product Name',
         selector: row => row['Name'],
@@ -53,4 +29,10 @@ export const purchaseProducts = [
         sortable: false,
         center: true,
     },
+    {
+        name: 'Actions',
+        selector: row => row['Action'],
+        sortable: false,
+        center: true,
+    }
 ];

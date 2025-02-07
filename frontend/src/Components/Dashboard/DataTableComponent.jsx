@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
-import { tableColumns } from './Defaultdata';
+import { SoldProducts as tableColumns } from './Defaultdata';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spinner } from 'reactstrap';
 import {fetchProductStatData} from '../../Redux/Slices/dashboardSlice'

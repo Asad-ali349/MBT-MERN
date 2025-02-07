@@ -17,8 +17,8 @@ const BasicFormControlClass = () => {
         name: yup.string().required().min(3),
         category_id:yup.string().required(),
         price:yup.string().required(),
-        description:yup.string().required(),
-        image: yup.string().required(),
+        description:yup.string(),
+        image: yup.string(),
         status: yup.string().required(),
     });
 

@@ -23,6 +23,8 @@ import Onsite from "../Components/Orders/Onsite/index.jsx";
 import AddOnsite from "../Components/Orders/Onsite/Add/index.jsx";
 import Online from "../Components/Orders/Online";
 import Receipt from "../Components/Receipt/index.jsx";
+import Purchase from '../Components/Purchases';
+import AddPurchase from '../Components/Purchases/AddPurchase'
 // setup fake backend
 
 const Routers = () => {
@@ -44,6 +46,9 @@ const Routers = () => {
                 element={<AddOnsite />}
               />
               <Route path={"/online_orders"} element={<Online />} />
+              <Route path={"/purchases"} element={<Purchase />} />
+              <Route path={"/purchases/add"} element={<AddPurchase />} />
+              <Route path={"/purchases/edit/:id"} element={<AddPurchase />} />
               <Route path={"/products"} element={<Products />} />
               <Route path={"/products/add"} element={<AddProducts />} />
               <Route path={"/products/edit"} element={<EditProducts />} />

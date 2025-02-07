@@ -22,7 +22,7 @@ import userRouter from "./routes/users.js";
 import categoryRouter from "./routes/categories.js";
 import productRouter from "./routes/products.js";
 import orderRouter from "./routes/orders.js";
-
+import purchaseRouter from './routes/purchases.js';
 
 import cloudinary from 'cloudinary';
 import { Server } from 'socket.io';
@@ -66,10 +66,11 @@ app.use("/user", userRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
+app.use("/purchase", purchaseRouter);
 
 // app.use("/organization", organizationRouter);
 
-// The app.get() responds with “Hello to ToDo App API” for requests to the root URL (/) or route.
+// The app.get() responds with "Hello to ToDo App API" for requests to the root URL (/) or route.
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to Mithu BBQ App API</h1>");
 });

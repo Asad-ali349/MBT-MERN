@@ -2,7 +2,7 @@
 export const Data = [
     {
        title:"Product Name",
-       placeholder: "Enter Cartegory Name", 
+       placeholder: "Enter Product Name", 
        type:"text",
        name :"name"
     },
