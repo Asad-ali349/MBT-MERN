@@ -17,6 +17,13 @@ export const fetchAllPurchases = createAsyncThunk(
   FETCH_All_PURCHASE,
   async (date) => {
     try {
+      if (!date) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        date = `${year}-${month}-${day}`;
+      }
       const response = await GET(`purchase${date ? `?date=${date}` : ''}`);
       return response.data;
     } catch (error) {
