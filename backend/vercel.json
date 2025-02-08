@@ -1,10 +1,11 @@
 {
     "version": 2,
-    "name": "directory_backend",
+    "name": "mbt_backend",
     "builds": [
        { "src": "./index.js", "use": "@vercel/node" }
     ],
     "routes": [
+      { "src": "/socket.io/(.*)", "dest": "/socket.io/$1" },
        { "src": "/(.*)", "dest": "/" }
     ]
  }
