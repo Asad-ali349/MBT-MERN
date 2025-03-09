@@ -196,6 +196,8 @@ const BasicFormControlClass = () => {
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         style={{ height: "40px" }}
+                        min={0.1}  // Ensures values are greater than 0
+                        step="any" // Allows decimal values
                       />
                     )}
                     <small style={{ color: "red" }}>

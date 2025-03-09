@@ -213,18 +213,18 @@ const OnsiteOrders = createSlice({
       const { id, value } = action.payload;
       const product = state.products.find((item) => item._id === id);
 
-      let quantity = parseInt(value);
-      if (quantity < 0) {
-        toast.warning("The minimum order quantity is 1!");
+      let quantity = Number(parseFloat(value));
+      if (quantity < 0.0) {
+        toast.warning("The minimum order quantity should be greater than 0!");
         return;
       }
-      if (!Number.isInteger(parseFloat(quantity))) {
+      if (Number.isNaN(parseFloat(quantity))) {
         product.quantity = 0;
       } else {
         product.quantity = quantity;
       }
 
-      const newTotalPrice = parseFloat(product.price * product.quantity);
+      const newTotalPrice = parseFloat(Math.ceil(product.price * product.quantity));
       state.totalPrice = Math.abs(
         state.totalPrice - product.totalPrice + newTotalPrice
       );

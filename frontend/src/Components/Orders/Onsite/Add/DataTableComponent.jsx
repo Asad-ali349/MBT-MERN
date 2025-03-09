@@ -34,7 +34,8 @@ const DataTableComponent = () => {
     Quantity: (
       <input
         className="form-control w-50"
-        value={item.quantity}
+        placeholder={item.quantity}
+        type ='number'
         onChange={(e) => {
           handleChangeQuantity(item._id, e.target.value);
         }}
