@@ -34,7 +34,7 @@ COPY --from=builder /usr/src/app/dist .
 # Copy custom nginx.conf to the container
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 8080
+# Expose port 8080 for frontend app
 EXPOSE 8080
 
 # Start nginx with the custom configuration
