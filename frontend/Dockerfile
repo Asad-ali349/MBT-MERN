@@ -1,7 +1,7 @@
 # Stage 1: Build the application
 FROM node:16.20-alpine as builder
 
-# Set the working directory
+# Set the working directory for the app
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
